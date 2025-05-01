@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Films for {{ username }}</title>
+</head>
+<body>
+    <h1>Films watched by {{ username }}</h1>
+    <ul>
+        {% for film in films %}
+            <li><strong>{{ film.title }}</strong> — {{ film.rating }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/">Search again</a>
+</body>
+</html>
