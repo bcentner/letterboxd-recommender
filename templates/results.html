@@ -1,15 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Films for {{ username }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letterboxd Stats - {{ username }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .star-rating {
+            display: inline-block;
+            color: #FFD700;
+            font-size: 1.2em;
+        }
+        .rating-bar {
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
 </head>
-<body>
-    <h1>Films watched by {{ username }}</h1>
-    <ul>
-        {% for film in films %}
-            <li><strong>{{ film.title }}</strong> — {{ film.rating }}</li>
-        {% endfor %}
-    </ul>
-    <a href="/">Search again</a>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">{{ username }}'s Letterboxd Stats</h1>
+                
+                <!-- Overview Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-indigo-50 rounded-lg p-6">
+                        <h2 class="text-xl font-semibold mb-4 text-indigo-800">Overview</h2>
+                        <div class="space-y-2">
+                            <p class="text-gray-700">Total Films: <span class="font-semibold">{{ stats.total_films }}</span></p>
+                            <p class="text-gray-700">Average Rating: <span class="font-semibold">{{ stats.average_rating }}/5</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Rating Distribution -->
+                    <div class="bg-indigo-50 rounded-lg p-6">
+                        <h2 class="text-xl font-semibold mb-4 text-indigo-800">Rating Distribution</h2>
+                        <div class="space-y-4">
+                            {% for rating in ['5', '4.5', '4', '3.5', '3', '2.5', '2', '1.5', '1', '0.5'] %}
+                            {% set count = stats.rating_distribution.get(rating, 0) %}
+                            {% set percentage = (count / stats.total_films * 100)|round if stats.total_films > 0 else 0 %}
+                            <div class="space-y-1">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="star-rating">
+                                            {% for i in range(rating|float|int) %}★{% endfor %}
+                                            {% if rating|float % 1 == 0.5 %}½{% endif %}
+                                        </span>
+                                        <span class="text-gray-700">{{ count }} films</span>
+                                    </div>
+                                    <span class="text-gray-500 text-sm">{{ percentage }}%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="rating-bar h-full bg-indigo-600 rounded-full" style="width: {{ percentage }}%"></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Genres and Years -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-indigo-50 rounded-lg p-6">
+                        <h2 class="text-xl font-semibold mb-4 text-indigo-800">Top Genres</h2>
+                        <div class="space-y-4">
+                            {% for genre, count in stats.top_genres.items() %}
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">{{ genre }}</span>
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-semibold text-gray-900">{{ count }} films</span>
+                                    <span class="text-gray-500 text-sm">({{ (count / stats.total_films * 100)|round }}%)</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="bg-indigo-50 rounded-lg p-6">
+                        <h2 class="text-xl font-semibold mb-4 text-indigo-800">Most Watched Years</h2>
+                        <div class="space-y-4">
+                            {% for year, count in stats.top_years.items() %}
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">{{ year }}</span>
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-semibold text-gray-900">{{ count }} films</span>
+                                    <span class="text-gray-500 text-sm">({{ (count / stats.total_films * 100)|round }}%)</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back Button -->
+            <div class="text-center">
+                <a href="/" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

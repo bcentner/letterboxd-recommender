@@ -9,10 +9,10 @@ def index():
     if request.method == "POST":
         username = request.form["username"]
         try:
-            films = scraper.fetch_films_with_ratings(username)
-            return render_template("results.html", username=username, films=films)
+            stats = scraper.fetch_user_stats(username)
+            return render_template("results.html", username=username, stats=stats)
         except Exception as e:
-            return f"Error fetching films: {e}", 500
+            return render_template("error.html", error=str(e))
     return render_template("index.html")
 
 if __name__ == "__main__":
