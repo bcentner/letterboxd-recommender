@@ -28,11 +28,14 @@
                         <h2 class="text-xl font-semibold mb-4 text-indigo-800">Overview</h2>
                         <div class="space-y-2">
                             <p class="text-gray-700">Total Films: <span class="font-semibold">{{ stats.total_films }}</span></p>
+                            {% if options.ratings %}
                             <p class="text-gray-700">Average Rating: <span class="font-semibold">{{ stats.average_rating }}/5</span></p>
+                            {% endif %}
                         </div>
                     </div>
                     
                     <!-- Rating Distribution -->
+                    {% if options.ratings and stats.rating_distribution %}
                     <div class="bg-indigo-50 rounded-lg p-6">
                         <h2 class="text-xl font-semibold mb-4 text-indigo-800">Rating Distribution</h2>
                         <div class="space-y-4">
@@ -57,10 +60,12 @@
                             {% endfor %}
                         </div>
                     </div>
+                    {% endif %}
                 </div>
 
                 <!-- Top Genres and Years -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {% if options.genres and stats.top_genres %}
                     <div class="bg-indigo-50 rounded-lg p-6">
                         <h2 class="text-xl font-semibold mb-4 text-indigo-800">Top Genres</h2>
                         <div class="space-y-4">
@@ -75,6 +80,7 @@
                             {% endfor %}
                         </div>
                     </div>
+                    {% endif %}
 
                     <div class="bg-indigo-50 rounded-lg p-6">
                         <h2 class="text-xl font-semibold mb-4 text-indigo-800">Most Watched Years</h2>
@@ -91,6 +97,59 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Film List -->
+                {% if stats.films %}
+                <div class="mt-8">
+                    <h2 class="text-xl font-semibold mb-4 text-indigo-800">Films</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {% for film in stats.films %}
+                        <div class="bg-white border rounded-lg overflow-hidden shadow-sm">
+                            {% if film.poster_url %}
+                            <img src="{{ film.poster_url }}" alt="{{ film.title }}" class="w-full h-64 object-cover">
+                            {% endif %}
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-2">{{ film.title }}</h3>
+                                {% if film.year != "Unknown" %}
+                                <p class="text-gray-600 text-sm mb-1">{{ film.year }}</p>
+                                {% endif %}
+                                {% if film.director != "Unknown" %}
+                                <p class="text-gray-600 text-sm mb-1">Director: {{ film.director }}</p>
+                                {% endif %}
+                                {% if options.ratings and film.rating %}
+                                <div class="mt-2">
+                                    <span class="star-rating">
+                                        {% for i in range(film.rating|float|int) %}★{% endfor %}
+                                        {% if film.rating|float % 1 == 0.5 %}½{% endif %}
+                                    </span>
+                                </div>
+                                {% endif %}
+                                {% if options.genres and film.genres %}
+                                <div class="mt-2 flex flex-wrap gap-1">
+                                    {% for genre in film.genres %}
+                                    <span class="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full">{{ genre }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                {% if options.cast and film.cast %}
+                                <div class="mt-2">
+                                    <p class="text-sm font-medium text-gray-700">Cast:</p>
+                                    <ul class="text-sm text-gray-600 mt-1">
+                                        {% for actor in film.cast[:3] %}
+                                        <li>{{ actor.name }} as {{ actor.role }}</li>
+                                        {% endfor %}
+                                        {% if film.cast|length > 3 %}
+                                        <li class="text-gray-500">...and {{ film.cast|length - 3 }} more</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
             </div>
 
             <!-- Back Button -->
