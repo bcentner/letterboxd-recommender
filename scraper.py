@@ -45,21 +45,27 @@ class Scraper:
                     return url, await response.text()
         except Exception as e:
             print(f"Error fetching {url}: {str(e)}")
-            raise RuntimeError(f"Failed to fetch {url}: {str(e)}")
+            raise 
 
     async def _fetch_multiple_urls(self, session, urls: List[str]) -> Dict[str, str]:
         """Fetch multiple URLs in parallel."""
-        tasks = [self._fetch_with_semaphore(session, url) for url in urls]
-        results = []
-        for task in asyncio.as_completed(tasks):
-            try:
-                result = await task
-                results.append(result)
-            except Exception as e:
-                print(f"Task failed: {str(e)}")
-                continue
+        results = {}
+        tasks = []
+        for url in urls:
+            task = asyncio.create_task(self._fetch_with_semaphore(session, url))
+            tasks.append(task)
         
-        return dict(results)
+        try:
+            completed = await asyncio.gather(*tasks, return_exceptions=True)
+            for url, result in zip(urls, completed):
+                if isinstance(result, Exception):
+                    print(f"Failed to fetch {url}: {str(result)}")
+                else:
+                    results[url] = result[1]  # result is a tuple of (url, content)
+        except Exception as e:
+            print(f"Error in _fetch_multiple_urls: {str(e)}")
+        
+        return results
 
     async def get_film_data(self, session, film_id: str, film_url: str, json_url: str, options: FilmDataOptions) -> Dict:
         """Fetch all requested film data in parallel."""
@@ -67,7 +73,6 @@ class Scraper:
         urls_to_fetch = []
         cache_keys = []
 
-        # Always fetch basic info as it contains year and is needed for statistics
         cached_basic = self.cache.get_film(film_id, "basic_info")
         if cached_basic:
             film_data.update(cached_basic)
@@ -75,14 +80,14 @@ class Scraper:
             urls_to_fetch.append(json_url)
             cache_keys.append(("basic_info", json_url))
 
-        # Check cache for other data types
         if options.genres:
             cached_genres = self.cache.get_film(film_id, "genres")
             if cached_genres:
                 film_data["genres"] = cached_genres
             else:
-                urls_to_fetch.append(f"{film_url}genres/")
-                cache_keys.append(("genres", f"{film_url}genres/"))
+                genre_url = f"{film_url}genres/"
+                urls_to_fetch.append(genre_url)
+                cache_keys.append(("genres", genre_url))
 
         if options.cast:
             cached_cast = self.cache.get_film(film_id, "cast")
@@ -92,7 +97,7 @@ class Scraper:
                 urls_to_fetch.append(f"{film_url}crew/")
                 cache_keys.append(("cast", f"{film_url}crew/"))
 
-        # If we have URLs to fetch, do them in parallel
+
         if urls_to_fetch:
             try:
                 responses = await self._fetch_multiple_urls(session, urls_to_fetch)
@@ -115,7 +120,6 @@ class Scraper:
                                 self.cache.set_film(film_id, basic_info, "basic_info")
                             except json.JSONDecodeError as e:
                                 print(f"Error decoding JSON for {film_id}: {e}")
-                                # Even if JSON decode fails, try to get year from the film item
                                 film_data["year"] = "Unknown"
                         
                         elif data_type == "genres":
@@ -123,12 +127,20 @@ class Scraper:
                                 soup = BeautifulSoup(content, "html.parser")
                                 genres_section = soup.select_one("#tab-genres")
                                 if genres_section:
-                                    genres = [p.text.strip() for p in genres_section.select("p")]
-                                    if genres:  # Only update if we found genres
+                                    genres = [
+                                        a.text.strip()
+                                        for p in genres_section.select("p")
+                                        for a in p.find_all("a", href=True)
+                                        if "genre" in a["href"]    
+                                    ]
+                                    if genres:
                                         film_data["genres"] = genres
                                         self.cache.set_film(film_id, genres, "genres")
+                                else:
+                                    print(f"No genres section found for {film_id}")
                             except Exception as e:
-                                print(f"Error processing genres for {film_id}: {e}")
+                                print(f"Error processing genres for {film_id}: {str(e)}")
+                                print(f"Content received: {content[:200]}...")  # Print first 200 chars of content
                         
                         elif data_type == "cast":
                             try:
@@ -144,7 +156,7 @@ class Scraper:
                                                 "name": name.text.strip(),
                                                 "role": role.text.strip() if role else "Unknown"
                                             })
-                                if cast_list:  # Only update if we found cast
+                                if cast_list:  
                                     film_data["cast"] = cast_list
                                     self.cache.set_film(film_id, cast_list, "cast")
                             except Exception as e:
@@ -154,17 +166,8 @@ class Scraper:
 
         return film_data
 
-    async def fetch_user_stats(self, username: str, options: FilmDataOptions) -> Dict:
-        """
-        Fetch comprehensive statistics about a user's film watching habits.
-        
-        Args:
-            username (str): The Letterboxd username.
-            options (FilmDataOptions): What data to fetch for each film.
-
-        Returns:
-            dict: A dictionary containing various statistics about the user's film watching habits.
-        """
+    async def fetch_user_stats(self, username: str, options: FilmDataOptions, session: aiohttp.ClientSession) -> Dict:
+        """Fetch comprehensive statistics about a user's film watching habits."""
         stats = {
             "total_films": 0,
             "average_rating": 0,
@@ -178,140 +181,126 @@ class Scraper:
 
         total_rating = 0
         rated_films = 0
-        processed_films = 0  # Track how many films we actually process
+        processed_films = 0
 
-        async with aiohttp.ClientSession(headers=self.headers, timeout=self.timeout) as session:
-            try:
-                # Get the first page to determine total pages
-                first_page_url = f"{self.base_url}/{username}/films/"
-                async with session.get(first_page_url) as response:
-                    if response.status != 200:
-                        raise RuntimeError(f"Failed to fetch user profile: HTTP {response.status}")
-                    html = await response.text()
-                    soup = BeautifulSoup(html, "html.parser")
-                    total_pages = self.get_total_pages(soup)
+        try:
+            first_page_url = f"{self.base_url}/{username}/films/"
+            first_page_html = await self._fetch_url(session, first_page_url)
+            if not first_page_html:
+                raise RuntimeError(f"Failed to fetch user profile")
+            
+            soup = BeautifulSoup(first_page_html, "html.parser")
+            total_pages = self.get_total_pages(soup)
+            
+            # Process each page
+            for page in range(1, total_pages + 1):
+                page_url = f"{self.base_url}/{username}/films/page/{page}/" if page > 1 else first_page_url
+                if page > 1:
+                    page_html = await self._fetch_url(session, page_url)
+                    if not page_html:
+                        print(f"Warning: Failed to fetch page {page}")
+                        continue
+                    soup = BeautifulSoup(page_html, "html.parser")
 
-                # Process all pages
-                for page in range(1, total_pages + 1):
-                    if page > 1:
-                        page_url = f"{self.base_url}/{username}/films/page/{page}/"
-                        async with session.get(page_url) as response:
-                            if response.status != 200:
-                                print(f"Warning: Failed to fetch page {page}: HTTP {response.status}")
-                                continue
-                            html = await response.text()
-                            soup = BeautifulSoup(html, "html.parser")
+                film_items = soup.select("li.poster-container")
+                print(f"\nFound {len(film_items)} film items on page {page}")
 
-                    film_items = soup.select("li.poster-container")
-                    print(f"\nFound {len(film_items)} film items on page {page}")
+                # Prepare film data requests
+                film_tasks = []
+                for item in film_items:
+                    stats["total_films"] += 1
                     
-                    # Process films in parallel
-                    film_tasks = []
-                    for item in film_items:
-                        stats["total_films"] += 1
-                        
-                        film_poster = item.select_one("div.film-poster")
-                        if not film_poster or "data-details-endpoint" not in film_poster.attrs:
-                            print(f"Skipping film without data-details-endpoint on page {page}")
-                            continue
+                    film_poster = item.select_one("div.film-poster")
+                    if not film_poster or "data-details-endpoint" not in film_poster.attrs:
+                        print(f"Skipping film without data-details-endpoint on page {page}")
+                        continue
 
-                        json_url = f"{self.base_url}{film_poster['data-details-endpoint']}"
-                        film_id = json_url.split('/film/')[-1].split('/')[0]
-                        film_url = f"{self.base_url}/film/{film_id}/"
+                    json_url = f"{self.base_url}{film_poster['data-details-endpoint']}"
+                    film_id = json_url.split('/film/')[-1].split('/')[0]
+                    film_url = f"{self.base_url}/film/{film_id}/"
 
-                        # Get watch date if available
-                        watch_date = None
-                        date_tag = item.select_one("time")
-                        if date_tag and "datetime" in date_tag.attrs:
-                            try:
-                                watch_date = datetime.fromisoformat(date_tag["datetime"].replace("Z", "+00:00"))
-                                stats["monthly_distribution"][watch_date.strftime("%Y-%m")] += 1
-                            except ValueError:
-                                pass
-
-                        # Create task for fetching film data
-                        film_task = asyncio.create_task(
-                            self.get_film_data(session, film_id, film_url, json_url, options)
-                        )
-                        film_tasks.append((item, film_task))
-
-                    # Wait for all film data to be fetched
-                    for item, film_task in film_tasks:
+                    # Get watch date if available
+                    date_tag = item.select_one("time")
+                    if date_tag and "datetime" in date_tag.attrs:
                         try:
-                            film_data = await film_task
-                            processed_films += 1
-                            
-                            # Update statistics
-                            if "year" in film_data:
+                            watch_date = datetime.fromisoformat(date_tag["datetime"].replace("Z", "+00:00"))
+                            stats["monthly_distribution"][watch_date.strftime("%Y-%m")] += 1
+                        except ValueError:
+                            pass
+
+                    # Add film data task
+                    film_tasks.append((item, self.get_film_data(session, film_id, film_url, json_url, options)))
+
+                # Process film data in parallel
+                for item, film_task in film_tasks:
+                    try:
+                        film_data = await film_task
+                        processed_films += 1
+                        
+                        if "year" in film_data:
+                            try:
+                                year = int(film_data["year"])
+                                stats["years"][year] += 1
+                                decade = (year // 10) * 10
+                                stats["decades"][f"{decade}s"] += 1
+                            except (ValueError, TypeError):
+                                print(f"Invalid year value for film: {film_data.get('title', 'Unknown')}")
+
+                        if "director" in film_data and film_data["director"] != "Unknown":
+                            stats["directors"][film_data["director"]] += 1
+                        
+                        if options.genres and "genres" in film_data and film_data["genres"]:
+                            for genre in film_data["genres"]:
+                                stats["genres"][genre] += 1
+
+                        if options.ratings:
+                            rating = await self.get_film_rating(item)
+                            if rating:
                                 try:
-                                    year = int(film_data["year"])
-                                    stats["years"][year] += 1
-                                    # Add to decades counter
-                                    decade = (year // 10) * 10
-                                    stats["decades"][f"{decade}s"] += 1
-                                except (ValueError, TypeError):
-                                    print(f"Invalid year value for film: {film_data.get('title', 'Unknown')}")
+                                    rating_float = float(rating)
+                                    total_rating += rating_float
+                                    rated_films += 1
+                                    stats["rating_distribution"][rating] += 1
+                                except ValueError:
+                                    pass
 
-                            if "director" in film_data and film_data["director"] != "Unknown":
-                                stats["directors"][film_data["director"]] += 1
+                    except Exception as e:
+                        print(f"Error processing film: {str(e)}")
 
-                            if options.genres and "genres" in film_data and film_data["genres"]:
-                                for genre in film_data["genres"]:
-                                    stats["genres"][genre] += 1
+            print(f"\nProcessed {processed_films} films out of {stats['total_films']} total films")
+            print(f"Genres counter: {stats['genres']}")
 
-                            if options.ratings:
-                                rating = await self.get_film_rating(item)
-                                if rating:
-                                    try:
-                                        rating_float = float(rating)
-                                        total_rating += rating_float
-                                        rated_films += 1
-                                        stats["rating_distribution"][rating] += 1
-                                    except ValueError:
-                                        pass
+            if options.ratings and rated_films > 0:
+                stats["average_rating"] = round(total_rating / rated_films, 2)
 
-                        except Exception as e:
-                            print(f"Error processing film: {str(e)}")
+            if options.genres:
+                stats["top_genres"] = dict(stats["genres"].most_common(10))
+            stats["top_years"] = dict(stats["years"].most_common(10))
+            stats["top_directors"] = dict(stats["directors"].most_common(10))
+            stats["top_decades"] = dict(stats["decades"].most_common())
+            stats["monthly_watching"] = dict(stats["monthly_distribution"].most_common(12))
 
-                print(f"\nProcessed {processed_films} films out of {stats['total_films']} total films")
+            if stats["total_films"] > 0:
+                stats["films_per_year"] = round(stats["total_films"] / len(stats["years"]), 2)
+                if options.ratings:
+                    stats["rating_percentages"] = {
+                        rating: round((count / rated_films) * 100, 1)
+                        for rating, count in stats["rating_distribution"].items()
+                    }
 
-                # Calculate final statistics
-                if options.ratings and rated_films > 0:
-                    stats["average_rating"] = round(total_rating / rated_films, 2)
+            stats["debug"] = {
+                "total_films_found": stats["total_films"],
+                "films_processed": processed_films,
+                "years_count": len(stats["years"]),
+                "genres_count": len(stats["genres"]) if options.genres else 0,
+                "ratings_count": rated_films if options.ratings else 0
+            }
+            
+            return stats
 
-                # Get most common items
-                if options.genres:
-                    stats["top_genres"] = dict(stats["genres"].most_common(10))
-                stats["top_years"] = dict(stats["years"].most_common(10))
-                stats["top_directors"] = dict(stats["directors"].most_common(10))
-                stats["top_decades"] = dict(stats["decades"].most_common())
-                stats["monthly_watching"] = dict(stats["monthly_distribution"].most_common(12))
-
-                # Calculate additional statistics
-                if stats["total_films"] > 0:
-                    stats["films_per_year"] = round(stats["total_films"] / len(stats["years"]), 2)
-                    if options.ratings:
-                        stats["rating_percentages"] = {
-                            rating: round((count / rated_films) * 100, 1)
-                            for rating, count in stats["rating_distribution"].items()
-                        }
-
-                # Add debug information
-                stats["debug"] = {
-                    "total_films_found": stats["total_films"],
-                    "films_processed": processed_films,
-                    "years_count": len(stats["years"]),
-                    "genres_count": len(stats["genres"]) if options.genres else 0,
-                    "ratings_count": rated_films if options.ratings else 0
-                }
-                
-                return stats
-
-            except Exception as e:
-                print(f"Error in fetch_user_stats: {e}")
-                raise
-            finally:
-                self.cache.clear_expired()
+        except Exception as e:
+            print(f"Error in fetch_user_stats: {e}")
+            raise
 
     async def get_film_rating(self, item) -> Optional[str]:
         """Extract rating from a film item."""
@@ -325,16 +314,30 @@ class Scraper:
 
     def fetch_user_stats_sync(self, username: str, options: FilmDataOptions) -> Dict:
         """Synchronous wrapper for fetch_user_stats."""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
         try:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
+            return loop.run_until_complete(self._run_scraper(username, options))
+        finally:
+            loop.close()
+
+    async def _run_scraper(self, username: str, options: FilmDataOptions) -> Dict:
+        """Main entry point for scraping that ensures a single session is used."""
+        async with aiohttp.ClientSession(headers=self.headers, timeout=self.timeout) as session:
+            return await self.fetch_user_stats(username, options, session)
+
+    async def _fetch_url(self, session: aiohttp.ClientSession, url: str) -> str:
+        """Fetch a single URL with rate limiting."""
+        async with self.semaphore:
             try:
-                return loop.run_until_complete(self.fetch_user_stats(username, options))
-            finally:
-                loop.close()
-        except Exception as e:
-            print(f"Error in fetch_user_stats_sync: {e}")
-            raise
+                async with session.get(url) as response:
+                    if response.status != 200:
+                        print(f"HTTP {response.status} for {url}")
+                        return None
+                    return await response.text()
+            except Exception as e:
+                print(f"Error fetching {url}: {str(e)}")
+                return None
 
     def get_total_pages(self, soup):
         """Extract the total number of pages from the pagination."""
