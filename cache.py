@@ -1,65 +1,41 @@
-from rocksdict import Rdict
 import json
 from datetime import datetime, timedelta
 import os
-import shutil
 import atexit
 
 class Cache:
-    def __init__(self, db_path=".cache"):
-        """Initialize the cache with RocksDB using rocksdict."""
-        self.db_path = db_path
-        self.films_db = None
+    def __init__(self, cache_file="cache.json"):
+        """Initialize the cache with a JSON file."""
+        self.cache_file = cache_file
         self.expiration_days = 30  # Cache films for 30 days since they rarely change
-        
-        atexit.register(self.close)
-        self._initialize_database()
+        self.cache_data = {}
+        self._load_cache()
+        atexit.register(self._save_cache)
 
-    def _initialize_database(self):
-        """Initialize the database with proper error handling."""
-        os.makedirs(self.db_path, exist_ok=True)
-        
+    def _load_cache(self):
+        """Load the cache from the JSON file."""
         try:
-            self.films_db = Rdict(os.path.join(self.db_path, "films.db"))
+            if os.path.exists(self.cache_file):
+                with open(self.cache_file, 'r', encoding='utf-8') as f:
+                    self.cache_data = json.load(f)
         except Exception as e:
-            print(f"Error opening database: {e}")
-            if "Resource temporarily unavailable" in str(e):
-                print("Detected locked database, attempting cleanup...")
-                self._cleanup_database()
-                try:
-                    self.films_db = Rdict(os.path.join(self.db_path, "films.db"))
-                except Exception as e2:
-                    print(f"Error reopening database after cleanup: {e2}")
-                    raise
-            else:
-                raise
+            print(f"Error loading cache: {e}")
+            self.cache_data = {}
 
-    def _cleanup_database(self):
-        """Clean up database files and locks."""
+    def _save_cache(self):
+        """Save the cache to the JSON file."""
         try:
-            if self.films_db:
-                self.films_db.close()
-            
-            films_path = os.path.join(self.db_path, "films.db")
-            if os.path.exists(films_path):
-                shutil.rmtree(films_path)
-                
-            print("Successfully cleaned up database files")
+            with open(self.cache_file, 'w', encoding='utf-8') as f:
+                json.dump(self.cache_data, f, indent=2, ensure_ascii=False)
         except Exception as e:
-            print(f"Error during database cleanup: {e}")
-            raise
+            print(f"Error saving cache: {e}")
 
     def close(self):
-        """Close the database connection."""
-        try:
-            if self.films_db:
-                self.films_db.close()
-                self.films_db = None
-        except Exception as e:
-            print(f"Error closing database: {e}")
+        """Save the cache before closing."""
+        self._save_cache()
 
     def __del__(self):
-        """Ensure database is closed when the object is destroyed."""
+        """Ensure cache is saved when the object is destroyed."""
         self.close()
 
     def _is_expired(self, timestamp_str):
@@ -78,8 +54,8 @@ class Cache:
         """Get film details from cache for a specific data type."""
         try:
             cache_key = self._get_cache_key(film_id, data_type)
-            if cache_key in self.films_db:
-                cached_data = json.loads(self.films_db[cache_key])
+            if cache_key in self.cache_data:
+                cached_data = self.cache_data[cache_key]
                 if not self._is_expired(cached_data['timestamp']):
                     return cached_data['data']
         except Exception as e:
@@ -94,21 +70,25 @@ class Cache:
                 'timestamp': datetime.now().isoformat(),
                 'data': film_data
             }
-            self.films_db[cache_key] = json.dumps(cache_entry)
+            self.cache_data[cache_key] = cache_entry
+            # Periodically save cache to file after updates
+            self._save_cache()
         except Exception as e:
             print(f"Error caching film data for {data_type}: {e}")
 
     def clear_expired(self):
-        """Clear expired entries from the database."""
+        """Clear expired entries from the cache."""
         expired_keys = []
-        for key, value in self.films_db.items():
+        for key, value in self.cache_data.items():
             try:
-                cached_data = json.loads(value)
-                if self._is_expired(cached_data['timestamp']):
+                if self._is_expired(value['timestamp']):
                     expired_keys.append(key)
             except:
                 expired_keys.append(key)
         
         for key in expired_keys:
-            del self.films_db[key]
-            print(f"Cleared expired film data {key} from cache") 
+            del self.cache_data[key]
+            print(f"Cleared expired film data {key} from cache")
+        
+        if expired_keys:
+            self._save_cache() 
