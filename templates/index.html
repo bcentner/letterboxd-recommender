@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Letterboxd Stats</title>
+    <title>Letterboxd Movie Recommendations</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="container mx-auto px-4 py-16">
         <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
-            <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Letterboxd Stats</h1>
+            <h1 class="text-3xl font-bold text-center mb-4 text-gray-800">Letterboxd Movie Recommendations</h1>
+            <p class="text-center text-gray-600 mb-8">Get personalized movie recommendations based on your Letterboxd viewing history</p>
+            
             <form method="POST" class="space-y-6">
                 <div>
                     <label for="username" class="block text-sm font-medium text-gray-700">Letterboxd Username</label>
@@ -20,36 +22,43 @@
                     </div>
                 </div>
 
+                <div>
+                    <label for="num_recommendations" class="block text-sm font-medium text-gray-700">Number of Recommendations</label>
+                    <div class="mt-1">
+                        <select name="num_recommendations" id="num_recommendations" 
+                                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                            <option value="10">10 movies</option>
+                            <option value="15" selected>15 movies</option>
+                            <option value="20">20 movies</option>
+                            <option value="25">25 movies</option>
+                        </select>
+                    </div>
+                </div>
+
                 <!-- Data Fetching Options -->
                 <div class="space-y-4">
-                    <h2 class="text-lg font-medium text-gray-900">Data to Fetch</h2>
+                    <h2 class="text-lg font-medium text-gray-900">Analysis Options</h2>
+                    <p class="text-sm text-gray-600">Select what data to analyze for better recommendations</p>
                     <div class="space-y-2">
                         <div class="flex items-center">
-                            <input type="checkbox" name="fetch_basic" id="fetch_basic" checked
-                                   class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                            <label for="fetch_basic" class="ml-2 block text-sm text-gray-700">
-                                Basic Info (Title, Year, Director)
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="checkbox" name="fetch_genres" id="fetch_genres"
+                            <input type="checkbox" name="fetch_genres" id="fetch_genres" checked
                                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
                             <label for="fetch_genres" class="ml-2 block text-sm text-gray-700">
-                                Genres
+                                Analyze Genres (Recommended)
                             </label>
                         </div>
                         <div class="flex items-center">
                             <input type="checkbox" name="fetch_cast" id="fetch_cast"
                                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
                             <label for="fetch_cast" class="ml-2 block text-sm text-gray-700">
-                                Cast Information
+                                Analyze Cast (Slower but more accurate)
                             </label>
                         </div>
                         <div class="flex items-center">
                             <input type="checkbox" name="fetch_ratings" id="fetch_ratings" checked
                                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
                             <label for="fetch_ratings" class="ml-2 block text-sm text-gray-700">
-                                Rating Information
+                                Analyze Ratings (Recommended)
                             </label>
                         </div>
                     </div>
@@ -57,9 +66,16 @@
 
                 <button type="submit"
                         class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Get Stats
+                    Get Movie Recommendations
                 </button>
             </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-xs text-gray-500">
+                    This tool analyzes your Letterboxd profile to suggest movies you might enjoy.
+                    <br>Processing may take 1-2 minutes for users with large collections.
+                </p>
+            </div>
         </div>
     </div>
 </body>
