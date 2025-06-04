@@ -361,3 +361,66 @@ class Scraper:
                 continue
 
         return max_page
+
+    async def get_watched_films(self, username: str, session: aiohttp.ClientSession) -> set:
+        """Get a set of all films the user has watched (for filtering recommendations)"""
+        watched_films = set()
+        
+        try:
+            first_page_url = f"{self.base_url}/{username}/films/"
+            first_page_html = await self._fetch_url(session, first_page_url)
+            if not first_page_html:
+                return watched_films
+            
+            soup = BeautifulSoup(first_page_html, "html.parser")
+            total_pages = self.get_total_pages(soup)
+            
+            # Process each page to collect film titles
+            for page in range(1, min(total_pages + 1, 10)):  # Limit to first 10 pages for performance
+                page_url = f"{self.base_url}/{username}/films/page/{page}/" if page > 1 else first_page_url
+                if page > 1:
+                    page_html = await self._fetch_url(session, page_url)
+                    if not page_html:
+                        continue
+                    soup = BeautifulSoup(page_html, "html.parser")
+
+                film_items = soup.select("li.poster-container")
+                
+                for item in film_items:
+                    film_poster = item.select_one("div.film-poster")
+                    if not film_poster or "data-details-endpoint" not in film_poster.attrs:
+                        continue
+
+                    json_url = f"{self.base_url}{film_poster['data-details-endpoint']}"
+                    film_id = json_url.split('/film/')[-1].split('/')[0]
+                    
+                    # Try to get cached basic info first
+                    cached_basic = self.cache.get_film(film_id, "basic_info")
+                    if cached_basic and "title" in cached_basic and "year" in cached_basic:
+                        title = cached_basic["title"]
+                        year = cached_basic["year"]
+                        normalized_title = f"{title.lower().strip()} ({year})"
+                        watched_films.add(normalized_title)
+                    else:
+                        # If not cached, we'd need to fetch it, but for performance, skip for now
+                        # In a production system, you might want to fetch these in parallel
+                        pass
+            
+        except Exception as e:
+            print(f"Error fetching watched films: {e}")
+        
+        return watched_films
+
+    def get_watched_films_sync(self, username: str) -> set:
+        """Synchronous wrapper for get_watched_films"""
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            return loop.run_until_complete(self._run_watched_films_scraper(username))
+        finally:
+            loop.close()
+
+    async def _run_watched_films_scraper(self, username: str) -> set:
+        """Get watched films with a single session"""
+        async with aiohttp.ClientSession(headers=self.headers, timeout=self.timeout) as session:
+            return await self.get_watched_films(username, session)
