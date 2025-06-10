@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from stats import UserProfile, StatsCalculator
 from collections import defaultdict, Counter
 import time
+import math
+import os
 
 
 @dataclass
@@ -17,26 +19,41 @@ class MovieRecommendation:
     genres: List[str]
     overview: str
     poster_url: str
+    imdb_id: str = None
     tmdb_id: Optional[str] = None
     letterboxd_url: Optional[str] = None
     score: float = 0.0
     reasons: List[str] = None
+    rating: float = 0.0
+    num_votes: int = 0
+    runtime: int = 0
+    cast: List[str] = None
     
     def __post_init__(self):
         if self.reasons is None:
             self.reasons = []
+        if self.cast is None:
+            self.cast = []
 
 
 class MovieRecommendationEngine:
     """Generates movie recommendations based on user's Letterboxd profile"""
     
-    def __init__(self, tmdb_api_key: Optional[str] = None):
+    def __init__(self, tmdb_api_key: Optional[str] = None, movie_db_file: str = "movie_database.json"):
         self.tmdb_api_key = tmdb_api_key
         self.tmdb_base_url = "https://api.themoviedb.org/3"
         self.letterboxd_base_url = "https://letterboxd.com"
         self.stats_calculator = StatsCalculator()
+        self.movie_db_file = movie_db_file
         
-        # Common genres mapping for TMDB
+        # Load our movie database on initialization
+        self.movie_database = self._load_movie_database()
+        print(f"Loaded {len(self.movie_database)} movies from database")
+        
+        # Create lookup indexes for efficient querying
+        self._create_indexes()
+        
+        # Common genres mapping for TMDB (kept for backward compatibility)
         self.genre_mapping = {
             "Action": 28, "Adventure": 12, "Animation": 16, "Comedy": 35,
             "Crime": 80, "Documentary": 99, "Drama": 18, "Family": 10751,
@@ -45,160 +62,265 @@ class MovieRecommendationEngine:
             "TV Movie": 10770, "Thriller": 53, "War": 10752, "Western": 37
         }
     
-    def generate_recommendations(self, user_profile: UserProfile, num_recommendations: int = 20) -> List[MovieRecommendation]:
-        """Generate movie recommendations for a user"""
-        recommendations = []
-        
+    def _load_movie_database(self) -> List[Dict]:
+        """Load the movie database from JSON file"""
         try:
+            with open(self.movie_db_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except FileNotFoundError:
+            print(f"Warning: Movie database file {self.movie_db_file} not found. Using fallback data.")
+            return self._get_fallback_movies()
+        except json.JSONDecodeError as e:
+            print(f"Error loading movie database: {e}. Using fallback data.")
+            return self._get_fallback_movies()
+    
+    def _get_fallback_movies(self) -> List[Dict]:
+        """Fallback movie data if database file is not available"""
+        return [
+            {
+                "title": "The Shawshank Redemption", "year": 1994, "director": "Frank Darabont",
+                "genres": ["Drama"], "rating": 9.3, "num_votes": 3100000, "runtime": 142,
+                "overview": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+                "imdb_id": "tt0111161", "poster_url": "", "cast": ["Tim Robbins", "Morgan Freeman"]
+            },
+            {
+                "title": "The Godfather", "year": 1972, "director": "Francis Ford Coppola",
+                "genres": ["Crime", "Drama"], "rating": 9.2, "num_votes": 2100000, "runtime": 175,
+                "overview": "The patriarch of a crime family transfers control to his reluctant son.",
+                "imdb_id": "tt0068646", "poster_url": "", "cast": ["Marlon Brando", "Al Pacino"]
+            },
+            {
+                "title": "The Dark Knight", "year": 2008, "director": "Christopher Nolan",
+                "genres": ["Action", "Crime", "Drama"], "rating": 9.0, "num_votes": 3000000, "runtime": 152,
+                "overview": "Batman sets out to dismantle the remaining criminal organizations that plague Gotham.",
+                "imdb_id": "tt0468569", "poster_url": "", "cast": ["Christian Bale", "Heath Ledger"]
+            }
+        ]
+    
+    def _create_indexes(self):
+        """Create lookup indexes for efficient querying"""
+        self.genre_index = defaultdict(list)
+        self.director_index = defaultdict(list)
+        self.year_index = defaultdict(list)
+        self.cast_index = defaultdict(list)
+        
+        for i, movie in enumerate(self.movie_database):
+            # Index by genres
+            for genre in movie.get('genres', []):
+                self.genre_index[genre.lower()].append(i)
+            
+            # Index by director
+            director = movie.get('director', '').lower()
+            if director and director != 'unknown':
+                self.director_index[director].append(i)
+            
+            # Index by decade
+            year = movie.get('year', 0)
+            if year:
+                decade = (year // 10) * 10
+                self.year_index[f"{decade}s"].append(i)
+            
+            # Index by cast
+            for actor in movie.get('cast', []):
+                if actor:
+                    self.cast_index[actor.lower()].append(i)
+    
+    def generate_recommendations(self, user_profile: UserProfile, num_recommendations: int = 20) -> List[MovieRecommendation]:
+        """Generate movie recommendations for a user based on their profile"""
+        try:
+            print(f"Generating recommendations for user with {len(user_profile.watched_films)} watched films")
+            
             # Get recommendations from multiple sources
-            if self.tmdb_api_key:
-                tmdb_recs = self._get_tmdb_recommendations(user_profile, num_recommendations // 2)
-                recommendations.extend(tmdb_recs)
+            all_recommendations = []
             
-            # Get genre-based recommendations
-            genre_recs = self._get_genre_based_recommendations(user_profile, num_recommendations // 3)
-            recommendations.extend(genre_recs)
+            # Genre-based recommendations (40% of results)
+            genre_recs = self._get_genre_based_recommendations(user_profile, int(num_recommendations * 0.4))
+            all_recommendations.extend(genre_recs)
             
-            # Get director-based recommendations  
-            director_recs = self._get_director_based_recommendations(user_profile, num_recommendations // 4)
-            recommendations.extend(director_recs)
+            # Director-based recommendations (30% of results)
+            director_recs = self._get_director_based_recommendations(user_profile, int(num_recommendations * 0.3))
+            all_recommendations.extend(director_recs)
+            
+            # Era/decade-based recommendations (20% of results)
+            era_recs = self._get_era_based_recommendations(user_profile, int(num_recommendations * 0.2))
+            all_recommendations.extend(era_recs)
+            
+            # Highly-rated discoveries (10% of results)
+            discovery_recs = self._get_discovery_recommendations(user_profile, int(num_recommendations * 0.1))
+            all_recommendations.extend(discovery_recs)
             
             # Remove duplicates and filter out watched films
-            recommendations = self._deduplicate_and_filter(recommendations, user_profile.watched_films)
+            filtered_recs = self._deduplicate_and_filter(all_recommendations, user_profile.watched_films)
             
             # Score and rank recommendations
-            scored_recommendations = self._score_recommendations(recommendations, user_profile)
+            scored_recommendations = self._score_recommendations(filtered_recs, user_profile)
             
             # Return top recommendations
-            return sorted(scored_recommendations, key=lambda x: x.score, reverse=True)[:num_recommendations]
+            final_recs = sorted(scored_recommendations, key=lambda x: x.score, reverse=True)[:num_recommendations]
+            print(f"Generated {len(final_recs)} recommendations")
+            
+            return final_recs
             
         except Exception as e:
             print(f"Error generating recommendations: {e}")
+            import traceback
+            traceback.print_exc()
             return []
     
-    def _get_tmdb_recommendations(self, user_profile: UserProfile, count: int) -> List[MovieRecommendation]:
-        """Get recommendations from TMDB API based on user preferences"""
-        if not self.tmdb_api_key:
-            return []
-        
+    def _get_genre_based_recommendations(self, user_profile: UserProfile, count: int) -> List[MovieRecommendation]:
+        """Get recommendations based on user's preferred genres"""
         recommendations = []
         
-        try:
-            # Get popular movies in preferred genres
-            preferred_genres = list(user_profile.preferred_genres.keys())[:3]
-            
-            for genre in preferred_genres:
-                genre_id = self.genre_mapping.get(genre)
-                if genre_id:
-                    url = f"{self.tmdb_base_url}/discover/movie"
-                    params = {
-                        "api_key": self.tmdb_api_key,
-                        "with_genres": genre_id,
-                        "sort_by": "popularity.desc",
-                        "vote_average.gte": 6.5,  # Only well-rated films
-                        "page": 1
-                    }
-                    
-                    response = requests.get(url, params=params, timeout=10)
-                    if response.status_code == 200:
-                        data = response.json()
-                        for movie in data.get("results", [])[:count//3]:
-                            rec = self._create_recommendation_from_tmdb(movie, [f"Popular in {genre}"])
-                            if rec:
-                                recommendations.append(rec)
-                    time.sleep(0.1)  # Rate limiting
-                    
-        except Exception as e:
-            print(f"Error fetching TMDB recommendations: {e}")
+        # Get user's top genres
+        top_genres = list(user_profile.preferred_genres.keys())[:5]
         
-        return recommendations
+        for genre in top_genres:
+            genre_lower = genre.lower()
+            if genre_lower in self.genre_index:
+                # Get movies in this genre
+                movie_indices = self.genre_index[genre_lower]
+                
+                # Sort by rating and vote count for quality
+                sorted_movies = sorted(
+                    [self.movie_database[i] for i in movie_indices],
+                    key=lambda m: (m.get('rating', 0) * math.log(max(m.get('num_votes', 1), 1))),
+                    reverse=True
+                )
+                
+                # Take top movies from this genre
+                genre_count = max(1, count // len(top_genres))
+                for movie in sorted_movies[:genre_count * 2]:  # Get extra to account for filtering
+                    if len(recommendations) >= count:
+                        break
+                    
+                    rec = self._create_recommendation_from_movie(
+                        movie, 
+                        [f"You enjoy {genre} films ({user_profile.preferred_genres[genre]} watched)"]
+                    )
+                    if rec:
+                        recommendations.append(rec)
+        
+        return recommendations[:count]
     
-    def _create_recommendation_from_tmdb(self, movie_data: Dict, reasons: List[str]) -> Optional[MovieRecommendation]:
-        """Create a MovieRecommendation from TMDB data"""
+    def _get_director_based_recommendations(self, user_profile: UserProfile, count: int) -> List[MovieRecommendation]:
+        """Get recommendations based on user's preferred directors"""
+        recommendations = []
+        
+        # Get user's top directors
+        top_directors = list(user_profile.preferred_directors.keys())[:3]
+        
+        for director in top_directors:
+            director_lower = director.lower()
+            if director_lower in self.director_index:
+                # Get movies by this director
+                movie_indices = self.director_index[director_lower]
+                
+                # Sort by rating for quality
+                sorted_movies = sorted(
+                    [self.movie_database[i] for i in movie_indices],
+                    key=lambda m: m.get('rating', 0),
+                    reverse=True
+                )
+                
+                # Take top movies from this director
+                director_count = max(1, count // len(top_directors))
+                for movie in sorted_movies[:director_count * 2]:
+                    if len(recommendations) >= count:
+                        break
+                    
+                    rec = self._create_recommendation_from_movie(
+                        movie,
+                        [f"Directed by {director} ({user_profile.preferred_directors[director]} films watched)"]
+                    )
+                    if rec:
+                        recommendations.append(rec)
+        
+        return recommendations[:count]
+    
+    def _get_era_based_recommendations(self, user_profile: UserProfile, count: int) -> List[MovieRecommendation]:
+        """Get recommendations based on user's preferred decades"""
+        recommendations = []
+        
+        # Get user's top decades
+        top_decades = list(user_profile.preferred_decades.keys())[:3]
+        
+        for decade in top_decades:
+            if decade in self.year_index:
+                # Get movies from this decade
+                movie_indices = self.year_index[decade]
+                
+                # Sort by rating and popularity
+                sorted_movies = sorted(
+                    [self.movie_database[i] for i in movie_indices],
+                    key=lambda m: (m.get('rating', 0) * math.log(max(m.get('num_votes', 1), 1))),
+                    reverse=True
+                )
+                
+                # Take top movies from this decade
+                decade_count = max(1, count // len(top_decades))
+                for movie in sorted_movies[:decade_count * 2]:
+                    if len(recommendations) >= count:
+                        break
+                    
+                    rec = self._create_recommendation_from_movie(
+                        movie,
+                        [f"From the {decade} ({user_profile.preferred_decades[decade]} films watched)"]
+                    )
+                    if rec:
+                        recommendations.append(rec)
+        
+        return recommendations[:count]
+    
+    def _get_discovery_recommendations(self, user_profile: UserProfile, count: int) -> List[MovieRecommendation]:
+        """Get highly-rated films for discovery"""
+        recommendations = []
+        
+        # Get highly-rated films with good vote counts
+        highly_rated = sorted(
+            self.movie_database,
+            key=lambda m: (m.get('rating', 0) * math.log(max(m.get('num_votes', 1), 1))),
+            reverse=True
+        )
+        
+        # Take top films that might be discoveries
+        for movie in highly_rated[:count * 3]:  # Get extra for filtering
+            if len(recommendations) >= count:
+                break
+            
+            # Prefer lesser-known gems (high rating but not too many votes)
+            rating = movie.get('rating', 0)
+            votes = movie.get('num_votes', 0)
+            
+            if rating >= 7.5 and 1000 <= votes <= 500000:  # Sweet spot for discoveries
+                rec = self._create_recommendation_from_movie(
+                    movie,
+                    [f"Highly-rated discovery (Rating: {rating}/10)"]
+                )
+                if rec:
+                    recommendations.append(rec)
+        
+        return recommendations[:count]
+    
+    def _create_recommendation_from_movie(self, movie_data: Dict, reasons: List[str]) -> Optional[MovieRecommendation]:
+        """Create a MovieRecommendation from our database movie data"""
         try:
-            # Get genre names
-            genre_names = []
-            if "genre_ids" in movie_data:
-                genre_map = {v: k for k, v in self.genre_mapping.items()}
-                genre_names = [genre_map.get(gid, "Unknown") for gid in movie_data["genre_ids"]]
-            
-            poster_url = ""
-            if movie_data.get("poster_path"):
-                poster_url = f"https://image.tmdb.org/t/p/w500{movie_data['poster_path']}"
-            
             return MovieRecommendation(
                 title=movie_data.get("title", "Unknown"),
-                year=movie_data.get("release_date", "")[:4] if movie_data.get("release_date") else "",
-                director="Unknown",  # TMDB discover doesn't include director
-                genres=genre_names,
+                year=str(movie_data.get("year", "")),
+                director=movie_data.get("director", "Unknown"),
+                genres=movie_data.get("genres", []),
                 overview=movie_data.get("overview", ""),
-                poster_url=poster_url,
-                tmdb_id=str(movie_data.get("id", "")),
+                poster_url=movie_data.get("poster_url", ""),
+                imdb_id=movie_data.get("imdb_id", ""),
+                rating=movie_data.get("rating", 0.0),
+                num_votes=movie_data.get("num_votes", 0),
+                runtime=movie_data.get("runtime", 0),
+                cast=movie_data.get("cast", []),
                 reasons=reasons
             )
         except Exception as e:
-            print(f"Error creating recommendation from TMDB data: {e}")
+            print(f"Error creating recommendation from movie data: {e}")
             return None
-    
-    def _get_genre_based_recommendations(self, user_profile: UserProfile, count: int) -> List[MovieRecommendation]:
-        """Get recommendations based on user's genre preferences using curated lists"""
-        recommendations = []
-        
-        # Curated film database (normally you'd fetch this from a real API)
-        genre_films = self._get_curated_films_by_genre()
-        
-        preferred_genres = list(user_profile.preferred_genres.keys())[:5]
-        
-        for genre in preferred_genres:
-            if genre in genre_films:
-                films = genre_films[genre]
-                sample_size = min(count // len(preferred_genres), len(films))
-                selected_films = random.sample(films, sample_size)
-                
-                for film in selected_films:
-                    rec = MovieRecommendation(
-                        title=film["title"],
-                        year=film["year"],
-                        director=film["director"],
-                        genres=film["genres"],
-                        overview=film.get("overview", ""),
-                        poster_url=film.get("poster_url", ""),
-                        letterboxd_url=film.get("letterboxd_url", ""),
-                        reasons=[f"You enjoy {genre} films"]
-                    )
-                    recommendations.append(rec)
-        
-        return recommendations
-    
-    def _get_director_based_recommendations(self, user_profile: UserProfile, count: int) -> List[MovieRecommendation]:
-        """Get recommendations based on user's director preferences"""
-        recommendations = []
-        
-        # Get films by preferred directors that user hasn't seen
-        director_films = self._get_curated_films_by_director()
-        
-        preferred_directors = list(user_profile.preferred_directors.keys())[:3]
-        
-        for director in preferred_directors:
-            if director in director_films:
-                films = director_films[director]
-                sample_size = min(count // len(preferred_directors), len(films))
-                selected_films = random.sample(films, sample_size)
-                
-                for film in selected_films:
-                    rec = MovieRecommendation(
-                        title=film["title"],
-                        year=film["year"],
-                        director=director,
-                        genres=film["genres"],
-                        overview=film.get("overview", ""),
-                        poster_url=film.get("poster_url", ""),
-                        letterboxd_url=film.get("letterboxd_url", ""),
-                        reasons=[f"Directed by {director}, who you've enjoyed before"]
-                    )
-                    recommendations.append(rec)
-        
-        return recommendations
     
     def _deduplicate_and_filter(self, recommendations: List[MovieRecommendation], watched_films: Set[str]) -> List[MovieRecommendation]:
         """Remove duplicates and films the user has already watched"""
@@ -221,85 +343,76 @@ class MovieRecommendationEngine:
             score = 0.0
             reasons = list(rec.reasons)  # Copy existing reasons
             
+            # Base score from movie quality
+            if rec.rating > 0:
+                score += rec.rating / 2  # 0-5 points from rating
+            
+            if rec.num_votes > 0:
+                score += min(math.log(rec.num_votes) / 10, 2.0)  # 0-2 points from popularity
+            
             # Score based on genre match
             genre_score = 0
             for genre in rec.genres:
                 if genre in user_profile.preferred_genres:
-                    genre_score += user_profile.preferred_genres[genre]
+                    genre_weight = user_profile.preferred_genres[genre]
+                    genre_score += genre_weight / 10
             
             if genre_score > 0:
-                score += min(genre_score / 10, 3.0)  # Cap genre score at 3.0
+                score += min(genre_score, 3.0)  # Cap genre score at 3.0
+                reasons.append(f"Matches your genre preferences")
             
             # Score based on director match
             if rec.director in user_profile.preferred_directors:
                 director_boost = user_profile.preferred_directors[rec.director]
-                score += min(director_boost / 5, 2.0)  # Cap director score at 2.0
+                score += min(director_boost / 3, 2.0)  # Cap director score at 2.0
+                reasons.append(f"By {rec.director}, a director you enjoy")
                 
             # Score based on decade preference
             if rec.year and len(rec.year) >= 4:
                 try:
                     decade = f"{(int(rec.year) // 10) * 10}s"
                     if decade in user_profile.preferred_decades:
-                        score += min(user_profile.preferred_decades[decade] / 10, 1.0)
+                        decade_boost = user_profile.preferred_decades[decade]
+                        score += min(decade_boost / 20, 1.0)  # Cap decade score at 1.0
+                        reasons.append(f"From the {decade}, an era you enjoy")
                 except ValueError:
                     pass
             
-            # Add base popularity score
-            score += 1.0
+            # Bonus for runtime preferences (avoid very long or very short films)
+            if 80 <= rec.runtime <= 180:  # Sweet spot for most viewers
+                score += 0.5
             
             rec.score = score
+            rec.reasons = reasons
         
         return recommendations
     
-    def _get_curated_films_by_genre(self) -> Dict[str, List[Dict]]:
-        """Returns a curated database of films by genre (normally would be from external API)"""
+    def get_database_stats(self) -> Dict:
+        """Get statistics about the loaded movie database"""
+        if not self.movie_database:
+            return {}
+        
+        total_movies = len(self.movie_database)
+        
+        # Year distribution
+        years = [movie.get('year', 0) for movie in self.movie_database if movie.get('year', 0) > 0]
+        year_range = f"{min(years)} - {max(years)}" if years else "Unknown"
+        
+        # Genre distribution
+        all_genres = []
+        for movie in self.movie_database:
+            all_genres.extend(movie.get('genres', []))
+        genre_counts = Counter(all_genres)
+        
+        # Rating distribution
+        ratings = [movie.get('rating', 0) for movie in self.movie_database if movie.get('rating', 0) > 0]
+        avg_rating = sum(ratings) / len(ratings) if ratings else 0
+        
         return {
-            "Drama": [
-                {"title": "Parasite", "year": "2019", "director": "Bong Joon-ho", "genres": ["Drama", "Thriller"], "overview": "A poor family schemes to become employed by a wealthy family."},
-                {"title": "The Godfather", "year": "1972", "director": "Francis Ford Coppola", "genres": ["Drama", "Crime"], "overview": "The patriarch of a crime family transfers control to his reluctant son."},
-                {"title": "Moonlight", "year": "2016", "director": "Barry Jenkins", "genres": ["Drama"], "overview": "A young black man grapples with his identity and sexuality."},
-                {"title": "Manchester by the Sea", "year": "2016", "director": "Kenneth Lonergan", "genres": ["Drama"], "overview": "A man is forced to care for his nephew after his brother's death."},
-                {"title": "Her", "year": "2013", "director": "Spike Jonze", "genres": ["Drama", "Romance", "Science Fiction"], "overview": "A man develops a relationship with an AI operating system."}
-            ],
-            "Comedy": [
-                {"title": "The Grand Budapest Hotel", "year": "2014", "director": "Wes Anderson", "genres": ["Comedy", "Adventure"], "overview": "The adventures of a legendary concierge and his protégé."},
-                {"title": "In Bruges", "year": "2008", "director": "Martin McDonagh", "genres": ["Comedy", "Crime"], "overview": "Two hitmen hide out in Bruges after a job gone wrong."},
-                {"title": "Hunt for the Wilderpeople", "year": "2016", "director": "Taika Waititi", "genres": ["Comedy", "Adventure"], "overview": "A boy and his foster uncle become fugitives in the New Zealand bush."},
-                {"title": "What We Do in the Shadows", "year": "2014", "director": "Taika Waititi", "genres": ["Comedy", "Horror"], "overview": "Mockumentary about vampires sharing a flat in New Zealand."},
-                {"title": "Kiss Kiss Bang Bang", "year": "2005", "director": "Shane Black", "genres": ["Comedy", "Crime"], "overview": "A petty thief becomes involved in a murder investigation."}
-            ],
-            "Horror": [
-                {"title": "Hereditary", "year": "2018", "director": "Ari Aster", "genres": ["Horror", "Drama"], "overview": "A family is haunted by tragedy and sinister secrets."},
-                {"title": "The Wailing", "year": "2016", "director": "Na Hong-jin", "genres": ["Horror", "Mystery"], "overview": "A stranger arrives in a village and mysterious deaths begin."},
-                {"title": "It Follows", "year": "2014", "director": "David Robert Mitchell", "genres": ["Horror"], "overview": "A supernatural entity stalks a young woman."},
-                {"title": "The Babadook", "year": "2014", "director": "Jennifer Kent", "genres": ["Horror", "Drama"], "overview": "A mother and son are tormented by a sinister presence."},
-                {"title": "Midsommar", "year": "2019", "director": "Ari Aster", "genres": ["Horror", "Drama"], "overview": "A couple travels to Sweden for a festival that turns sinister."}
-            ],
-            "Science Fiction": [
-                {"title": "Blade Runner 2049", "year": "2017", "director": "Denis Villeneuve", "genres": ["Science Fiction"], "overview": "A young blade runner discovers a secret that could plunge society into chaos."},
-                {"title": "Arrival", "year": "2016", "director": "Denis Villeneuve", "genres": ["Science Fiction", "Drama"], "overview": "A linguist works with the military to communicate with aliens."},
-                {"title": "Ex Machina", "year": "2014", "director": "Alex Garland", "genres": ["Science Fiction", "Thriller"], "overview": "A programmer is selected to participate in a ground-breaking AI experiment."},
-                {"title": "Under the Skin", "year": "2013", "director": "Jonathan Glazer", "genres": ["Science Fiction", "Horror"], "overview": "An alien preys on men in Scotland."},
-                {"title": "Annihilation", "year": "2018", "director": "Alex Garland", "genres": ["Science Fiction", "Horror"], "overview": "A biologist signs up for a dangerous expedition into a mysterious zone."}
-            ]
-        }
-    
-    def _get_curated_films_by_director(self) -> Dict[str, List[Dict]]:
-        """Returns a curated database of films by director"""
-        return {
-            "Christopher Nolan": [
-                {"title": "Dunkirk", "year": "2017", "genres": ["War", "Drama"], "overview": "Allied soldiers are surrounded by enemy forces during WWII."},
-                {"title": "Interstellar", "year": "2014", "genres": ["Science Fiction", "Drama"], "overview": "A team of explorers travel through a wormhole in space."},
-                {"title": "The Prestige", "year": "2006", "genres": ["Mystery", "Thriller"], "overview": "Two stage magicians engage in competitive one-upmanship."}
-            ],
-            "Denis Villeneuve": [
-                {"title": "Dune", "year": "2021", "genres": ["Science Fiction", "Adventure"], "overview": "Paul Atreides leads a rebellion to free his desert world."},
-                {"title": "Sicario", "year": "2015", "genres": ["Crime", "Thriller"], "overview": "An FBI agent is enlisted in the war against drugs."},
-                {"title": "Prisoners", "year": "2013", "genres": ["Crime", "Thriller"], "overview": "A desperate father searches for his missing daughter."}
-            ],
-            "Wes Anderson": [
-                {"title": "Isle of Dogs", "year": "2018", "genres": ["Animation", "Comedy"], "overview": "A boy journeys to find his exiled dog on a trash island."},
-                {"title": "The Royal Tenenbaums", "year": "2001", "genres": ["Comedy", "Drama"], "overview": "An estranged family of former child prodigies reunites."},
-                {"title": "Moonrise Kingdom", "year": "2012", "genres": ["Comedy", "Drama"], "overview": "Two twelve-year-olds fall in love and run away together."}
-            ]
+            'total_movies': total_movies,
+            'year_range': year_range,
+            'average_rating': round(avg_rating, 2),
+            'top_genres': dict(genre_counts.most_common(10)),
+            'directors_count': len(self.director_index),
+            'database_file': self.movie_db_file
         }

@@ -58,17 +58,6 @@ class IMDBScraper:
         lists = [
             "/chart/top/",  # Top 250
             "/chart/moviemeter/",  # Most Popular Movies
-            "/search/title/?title_type=feature&num_votes=25000,&sort=user_rating,desc&count=250",  # Highly rated with many votes
-            "/search/title/?title_type=feature&year=2020,2024&num_votes=10000,&sort=user_rating,desc&count=250",  # Recent highly rated
-            "/search/title/?title_type=feature&year=2010,2019&num_votes=25000,&sort=user_rating,desc&count=250",  # 2010s highly rated
-            "/search/title/?title_type=feature&year=2000,2009&num_votes=25000,&sort=user_rating,desc&count=250",  # 2000s highly rated
-            "/search/title/?title_type=feature&year=1990,1999&num_votes=25000,&sort=user_rating,desc&count=250",  # 1990s highly rated
-            "/search/title/?title_type=feature&genres=action&num_votes=25000,&sort=user_rating,desc&count=100",  # Top Action
-            "/search/title/?title_type=feature&genres=comedy&num_votes=25000,&sort=user_rating,desc&count=100",  # Top Comedy
-            "/search/title/?title_type=feature&genres=drama&num_votes=25000,&sort=user_rating,desc&count=100",  # Top Drama
-            "/search/title/?title_type=feature&genres=horror&num_votes=25000,&sort=user_rating,desc&count=100",  # Top Horror
-            "/search/title/?title_type=feature&genres=sci-fi&num_votes=25000,&sort=user_rating,desc&count=100",  # Top Sci-Fi
-            "/search/title/?title_type=feature&genres=thriller&num_votes=25000,&sort=user_rating,desc&count=100",  # Top Thriller
         ]
         return lists
     
@@ -82,27 +71,34 @@ class IMDBScraper:
             
             soup = BeautifulSoup(response.content, 'html.parser')
             
-            # Find movie links - different selectors for different page types
-            movie_links = []
+            # Parse the text content to find IMDB IDs
+            page_text = soup.get_text()
             
-            # For top charts
-            movie_links.extend(soup.select('h3.titleColumn a[href*="/title/tt"]'))
-            movie_links.extend(soup.select('a.titleColumn[href*="/title/tt"]'))
+            # Look for patterns like "The Shawshank Redemption (1994)" followed by rating info
+            # and extract IMDB IDs from any links
             
-            # For search results
-            movie_links.extend(soup.select('h3.ipc-title a[href*="/title/tt"]'))
-            movie_links.extend(soup.select('.lister-item-header a[href*="/title/tt"]'))
-            
-            # For newer IMDB layouts
-            movie_links.extend(soup.select('a[class*="titleColumn"][href*="/title/tt"]'))
-            movie_links.extend(soup.select('a.cli-title[href*="/title/tt"]'))
-            
-            for link in movie_links:
+            # First, get all links that contain /title/tt
+            all_links = soup.find_all('a', href=True)
+            for link in all_links:
                 href = link.get('href', '')
                 if '/title/tt' in href:
-                    movie_id = re.search(r'/title/(tt\d+)', href)
-                    if movie_id:
-                        movie_ids.append(movie_id.group(1))
+                    # Extract the IMDB ID
+                    movie_id_match = re.search(r'/title/(tt\d+)', href)
+                    if movie_id_match:
+                        movie_id = movie_id_match.group(1)
+                        if movie_id not in movie_ids:
+                            movie_ids.append(movie_id)
+            
+            # If we still don't have movies, try parsing the structured text
+            if not movie_ids:
+                # Look for patterns in the text that indicate movie entries
+                lines = page_text.split('\n')
+                for line in lines:
+                    # Look for year patterns like (1994), (2008), etc.
+                    year_matches = re.findall(r'\((\d{4})\)', line)
+                    if year_matches:
+                        # This might be a movie line, but we need the ID from elsewhere
+                        pass
             
             print(f"Found {len(movie_ids)} movies in list")
             time.sleep(random.uniform(1, 2))  # Rate limiting
@@ -123,108 +119,219 @@ class IMDBScraper:
             
             soup = BeautifulSoup(response.content, 'html.parser')
             
-            # Extract title and year
-            title_element = soup.select_one('h1[data-testid="hero__pageTitle"] span')
-            if not title_element:
-                title_element = soup.select_one('h1.sc-afe43def-0')
-            if not title_element:
-                title_element = soup.select_one('h1')
+            # Extract title - look for the main heading
+            title = "Unknown"
+            title_candidates = [
+                soup.find('h1'),
+                soup.find('h1', class_=True),
+                soup.select_one('[data-testid="hero__pageTitle"]'),
+                soup.select_one('h1[data-testid="hero__pageTitle"]')
+            ]
             
-            title = title_element.text.strip() if title_element else "Unknown"
+            for candidate in title_candidates:
+                if candidate:
+                    title_text = candidate.get_text().strip()
+                    if title_text and title_text != "Unknown":
+                        title = title_text
+                        break
             
-            # Extract year
+            # Extract year from the text
             year = 0
-            year_elements = soup.select('a[href*="/year/"]')
-            for year_elem in year_elements:
-                year_text = year_elem.text.strip()
-                if year_text.isdigit() and 1900 <= int(year_text) <= 2030:
-                    year = int(year_text)
-                    break
-            
-            if year == 0:
-                year_match = re.search(r'\((\d{4})\)', soup.text)
-                if year_match:
-                    year = int(year_match.group(1))
-            
-            # Extract director
-            director = "Unknown"
-            director_links = soup.select('a[href*="/name/nm"]')
-            for link in director_links:
-                parent_text = link.parent.get_text() if link.parent else ""
-                if any(word in parent_text.lower() for word in ['director', 'directed']):
-                    director = link.text.strip()
-                    break
-            
-            # Extract genres
-            genres = []
-            genre_elements = soup.select('a[href*="/search/title/?genres="]')
-            for genre_elem in genre_elements[:5]:  # Limit to first 5 genres
-                genre_text = genre_elem.text.strip()
-                if genre_text and genre_text not in genres:
-                    genres.append(genre_text)
-            
-            # Extract cast
-            cast = []
-            cast_elements = soup.select('a[data-testid="cast-item-characters-link"]')
-            if not cast_elements:
-                cast_elements = soup.select('td.primary_photo + td a')
-            
-            for cast_elem in cast_elements[:5]:  # Top 5 cast members
-                cast_name = cast_elem.text.strip()
-                if cast_name and cast_name not in cast:
-                    cast.append(cast_name)
+            page_text = soup.get_text()
+            year_matches = re.findall(r'\b(19\d{2}|20\d{2})\b', page_text)
+            if year_matches:
+                # Take the first reasonable year
+                for year_str in year_matches:
+                    year_int = int(year_str)
+                    if 1900 <= year_int <= 2030:
+                        year = year_int
+                        break
             
             # Extract rating
             rating = 0.0
-            rating_elements = soup.select('[data-testid="hero-rating-bar__aggregate-rating__score"] span')
-            for rating_elem in rating_elements:
-                rating_text = rating_elem.text.strip()
+            rating_pattern = r'(\d+\.\d+)/10'
+            rating_matches = re.findall(rating_pattern, page_text)
+            if rating_matches:
                 try:
-                    rating = float(rating_text)
-                    break
-                except ValueError:
-                    continue
+                    rating = float(rating_matches[0])
+                except (ValueError, IndexError):
+                    pass
             
-            # Extract number of votes
-            num_votes = 0
-            votes_elements = soup.select('[data-testid="hero-rating-bar__aggregate-rating__vote-count"]')
-            for votes_elem in votes_elements:
-                votes_text = votes_elem.text.strip()
-                votes_match = re.search(r'([\d,]+)', votes_text)
-                if votes_match:
-                    num_votes = int(votes_match.group(1).replace(',', ''))
-                    break
+            # Extract director
+            director = "Unknown"
             
-            # Extract runtime
+            # Try to find director from structured HTML first
+            director_links = soup.find_all('a', href=re.compile(r'/name/nm\d+'))
+            for link in director_links:
+                # Get the surrounding text to see if it mentions director
+                parent = link.parent
+                if parent:
+                    parent_text = parent.get_text().lower()
+                    # Look for director-related keywords near the link
+                    if any(word in parent_text for word in ['director', 'directed']):
+                        director_name = link.get_text().strip()
+                        # Only accept reasonable name lengths
+                        if len(director_name.split()) <= 3 and len(director_name) < 30:
+                            director = director_name
+                            break
+            
+            # If still not found, try text patterns but be more specific
+            if director == "Unknown":
+                # Look for "Director: Name" or "Directed by Name" patterns
+                director_patterns = [
+                    r'Director\s*:?\s*([A-Z][a-zA-Z\.\s]{2,25}?)(?:\s|Writer|Star|$)',
+                    r'Directed by\s*([A-Z][a-zA-Z\.\s]{2,25}?)(?:\s|Writer|Star|$)',
+                ]
+                
+                for pattern in director_patterns:
+                    director_matches = re.findall(pattern, page_text)
+                    if director_matches:
+                        potential_director = director_matches[0].strip()
+                        # Clean up common issues
+                        potential_director = re.sub(r'\s+', ' ', potential_director)  # Remove extra spaces
+                        if len(potential_director) < 30 and not any(word in potential_director.lower() for word in ['writer', 'star', 'see']):
+                            director = potential_director
+                            break
+            
+            # Extract runtime with better validation
             runtime = 0
-            runtime_elements = soup.select('li[data-testid="title-techspec_runtime"]')
-            for runtime_elem in runtime_elements:
-                runtime_text = runtime_elem.text.strip()
-                runtime_match = re.search(r'(\d+)\s*(?:min|minute)', runtime_text)
-                if runtime_match:
-                    runtime = int(runtime_match.group(1))
-                    break
+            runtime_patterns = [
+                r'(\d{1,3})h\s*(\d{1,2})m',  # 2h 22m
+                r'(\d{1,3})\s*h\s*(\d{1,2})\s*m',  # 2 h 22 m
+            ]
             
-            # Extract overview/plot
+            for pattern in runtime_patterns:
+                runtime_matches = re.findall(pattern, page_text)
+                if runtime_matches:
+                    hours, minutes = runtime_matches[0]
+                    hours, minutes = int(hours), int(minutes)
+                    # Validate reasonable runtime (5 minutes to 10 hours)
+                    if 0 <= hours <= 10 and 0 <= minutes < 60:
+                        runtime = hours * 60 + minutes
+                        break
+            
+            # If no h/m format found, try minutes only
+            if runtime == 0:
+                minutes_patterns = [
+                    r'(\d{2,3})\s*(?:min|minutes)',  # 120 min
+                ]
+                for pattern in minutes_patterns:
+                    minutes_matches = re.findall(pattern, page_text)
+                    if minutes_matches:
+                        minutes = int(minutes_matches[0])
+                        # Validate reasonable runtime (5 to 600 minutes)
+                        if 5 <= minutes <= 600:
+                            runtime = minutes
+                            break
+            
+            # Extract number of votes with better parsing
+            num_votes = 0
+            # Look for patterns like "9.3 (3.1M)" or "Rating: 8.6/10 from 1.6M users"
+            votes_patterns = [
+                r'\((\d+\.?\d*[KM])\)',  # (3.1M)
+                r'(\d+\.?\d*[KM])\s*(?:users?|votes?|ratings?)',  # 3.1M users
+                r'from\s*(\d+\.?\d*[KM])\s*(?:users?|votes?)',  # from 3.1M users
+                r'(\d+,\d+)\s*(?:users?|votes?)',  # 1,234,567 votes
+            ]
+            
+            for pattern in votes_patterns:
+                votes_matches = re.findall(pattern, page_text, re.IGNORECASE)
+                if votes_matches:
+                    votes_str = votes_matches[0]
+                    try:
+                        if 'K' in votes_str:
+                            num_votes = int(float(votes_str.replace('K', '')) * 1000)
+                        elif 'M' in votes_str:
+                            num_votes = int(float(votes_str.replace('M', '')) * 1000000)
+                        else:
+                            num_votes = int(votes_str.replace(',', ''))
+                        
+                        # Validate reasonable vote count
+                        if 10 <= num_votes <= 10000000:  # 10 to 10M votes
+                            break
+                        else:
+                            num_votes = 0
+                    except (ValueError, IndexError):
+                        continue
+            
+            # Extract cast with better parsing
+            cast = []
+            # Look for structured cast information
+            cast_links = soup.find_all('a', href=re.compile(r'/name/nm\d+'))
+            potential_cast = []
+            
+            for link in cast_links:
+                name = link.get_text().strip()
+                # Skip if it's likely not a cast member
+                if (len(name.split()) <= 3 and 
+                    len(name) < 30 and 
+                    name not in ['Director', 'Writer', 'Producer'] and
+                    not any(skip_word in name.lower() for skip_word in ['see', 'more', 'info', 'imdb'])):
+                    potential_cast.append(name)
+            
+            # Remove duplicates and take top 5
+            seen = set()
+            for name in potential_cast:
+                if name not in seen and len(cast) < 5:
+                    cast.append(name)
+                    seen.add(name)
+            
+            # Extract overview with better patterns
             overview = ""
-            plot_elements = soup.select('[data-testid="plot-xl"], [data-testid="plot-l"], [data-testid="plot"]')
-            for plot_elem in plot_elements:
-                plot_text = plot_elem.text.strip()
-                if plot_text:
-                    overview = plot_text
+            
+            # First try meta description
+            meta_desc = soup.find('meta', attrs={'name': 'description'})
+            if meta_desc:
+                meta_content = meta_desc.get('content', '').strip()
+                # Check if it looks like a good plot description
+                if (50 <= len(meta_content) <= 500 and 
+                    not any(skip_word in meta_content.lower() for skip_word in ['imdb', 'rating', 'watch', 'trailer'])):
+                    overview = meta_content
+            
+            # If meta description isn't good, try other patterns
+            if not overview or len(overview) < 50:
+                plot_patterns = [
+                    r'(?:Plot|Story|Synopsis)[:\s]*([^\.]{50,300}\.)',
+                    r'([A-Z][^\.]{100,400}\.)',  # Sentences that look like plot descriptions
+                ]
+                
+                for pattern in plot_patterns:
+                    plot_matches = re.findall(pattern, page_text, re.IGNORECASE)
+                    for match in plot_matches:
+                        match = match.strip()
+                        # Check if it looks like a plot (not just random text)
+                        if (50 <= len(match) <= 500 and 
+                            not any(skip_word in match.lower() for skip_word in 
+                                   ['imdb', 'rating', 'watch', 'trailer', 'see production', 'writer', 'director'])):
+                            overview = match
+                            break
+                    if overview:
+                        break
+            
+            # Extract genres from text
+            genres = []
+            common_genres = ['Action', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Crime', 
+                           'Documentary', 'Drama', 'Family', 'Fantasy', 'Film Noir', 'History', 
+                           'Horror', 'Music', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 
+                           'Science Fiction', 'Sport', 'Thriller', 'War', 'Western', 'Epic', 
+                           'Period Drama', 'Prison Drama']
+            
+            for genre in common_genres:
+                if genre in page_text and genre not in genres:
+                    genres.append(genre)
+                if len(genres) >= 5:  # Limit to 5 genres
                     break
             
             # Extract poster URL
             poster_url = ""
-            poster_elements = soup.select('img[data-testid="hero-media__poster"]')
-            if not poster_elements:
-                poster_elements = soup.select('.ipc-media img')
-            
-            for poster_elem in poster_elements:
-                src = poster_elem.get('src', '')
-                if src and 'image' in src:
-                    poster_url = src
-                    break
+            img_tags = soup.find_all('img')
+            for img in img_tags:
+                src = img.get('src', '')
+                alt = img.get('alt', '')
+                if 'media-cache' in src or 'images' in src:
+                    if title.lower() in alt.lower() or 'poster' in alt.lower():
+                        poster_url = src
+                        break
             
             movie = Movie(
                 title=title,
@@ -265,12 +372,69 @@ class IMDBScraper:
         
         print(f"Collected {len(all_movie_ids)} unique movie IDs")
         
+        # If we don't have enough, add some known good IMDB IDs
+        if len(all_movie_ids) < 50:
+            print("Adding known movie IDs as fallback...")
+            known_ids = [
+                'tt0111161',  # The Shawshank Redemption
+                'tt0068646',  # The Godfather
+                'tt0468569',  # The Dark Knight
+                'tt0071562',  # The Godfather Part II
+                'tt0050083',  # 12 Angry Men
+                'tt0108052',  # Schindler's List
+                'tt0167260',  # The Lord of the Rings: The Return of the King
+                'tt0110912',  # Pulp Fiction
+                'tt0120737',  # The Lord of the Rings: The Fellowship of the Ring
+                'tt0060196',  # The Good, the Bad and the Ugly
+                'tt0109830',  # Forrest Gump
+                'tt0137523',  # Fight Club
+                'tt0080684',  # Star Wars: Episode V - The Empire Strikes Back
+                'tt0099685',  # Goodfellas
+                'tt0073486',  # One Flew Over the Cuckoo's Nest
+                'tt0167261',  # The Lord of the Rings: The Two Towers
+                'tt0133093',  # The Matrix
+                'tt0047478',  # Seven Samurai
+                'tt0114369',  # Se7en
+                'tt0317248',  # City of God
+                'tt0102926',  # The Silence of the Lambs
+                'tt0038650',  # It's a Wonderful Life
+                'tt0076759',  # Star Wars
+                'tt0120815',  # Saving Private Ryan
+                'tt0816692',  # Interstellar
+                'tt0110413',  # Léon: The Professional
+                'tt0120689',  # The Green Mile
+                'tt0054215',  # Psycho
+                'tt0253474',  # The Pianist
+                'tt0120586',  # American History X
+                'tt0082971',  # Raiders of the Lost Ark
+                'tt0172495',  # Gladiator
+                'tt0103064',  # Terminator 2: Judgment Day
+                'tt0088763',  # Back to the Future
+                'tt0078748',  # Alien
+                'tt0245429',  # Spirited Away
+                'tt0079944',  # Apocalypse Now
+                'tt0078788',  # The Deer Hunter
+                'tt0209144',  # Memento
+                'tt0407887',  # The Departed
+                'tt0482571',  # The Prestige
+                'tt0120382',  # The Big Lebowski
+                'tt0114814',  # The Usual Suspects
+                'tt0027977',  # Modern Times
+                'tt0095327',  # My Neighbor Totoro
+                'tt0090605',  # Aliens
+                'tt0087843',  # Once Upon a Time in America
+                'tt0086190',  # Star Wars: Episode VI - Return of the Jedi
+                'tt0986264',  # Taxi Driver
+                'tt0056172',  # Lawrence of Arabia
+            ]
+            all_movie_ids.update(known_ids)
+        
         # Shuffle to get variety
         movie_ids_list = list(all_movie_ids)
         random.shuffle(movie_ids_list)
         
         # Scrape movie details
-        for i, movie_id in enumerate(movie_ids_list[:target_count * 1.2]):  # Try more than target to account for failures
+        for i, movie_id in enumerate(movie_ids_list[:int(target_count * 1.2)]):  # Try more than target to account for failures
             if len(movies) >= target_count:
                 break
                 
