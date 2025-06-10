@@ -4,13 +4,19 @@ from stats import StatsCalculator, UserProfile
 from recommendation import MovieRecommendationEngine
 import asyncio
 import os
+from pathlib import Path
 
 app = Flask(__name__)
 scraper = Scraper()
 stats_calculator = StatsCalculator()
 
-# Optional TMDB API key for enhanced recommendations
-tmdb_api_key = os.environ.get('TMDB_API_KEY')
+# TODO: clean me up
+token_file = Path("token.txt")
+if token_file.exists():
+    with open(token_file, "r") as f:
+        tmdb_api_key = f.read().strip()
+else:
+    tmdb_api_key = os.environ.get('TMDB_API_KEY')
 recommendation_engine = MovieRecommendationEngine(tmdb_api_key=tmdb_api_key)
 
 @app.route("/", methods=["GET", "POST"])
