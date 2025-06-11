@@ -1,0 +1,386 @@
+[
+  {
+    "title": "Fountain of Youth",
+    "year": 2025,
+    "director": "Guy RitchieWriterJames VanderbiltStarsJohn KrasinskiNatalie PortmanEiza Gonz",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Family",
+      "Fantasy",
+      "Mystery"
+    ],
+    "cast": [
+      "John KrasinskiNatalie PortmanEiza Gonz"
+    ],
+    "rating": 5.7,
+    "num_votes": 0,
+    "runtime": 7925,
+    "overview": "a huge bravo for that, but the writing was just a constant distraction.",
+    "imdb_id": "tt27075958",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNWRlZmU3ZTItM2JlYi00YTg1LTgxNTItMjMyNzIyZWY5YWJmXkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg"
+  },
+  {
+    "title": "Straw",
+    "year": 2025,
+    "director": "Tyler PerryWriterTyler PerryStarsTaraji P",
+    "genres": [
+      "Drama",
+      "Family",
+      "Music",
+      "Thriller",
+      "War"
+    ],
+    "cast": [
+      "Taraji P"
+    ],
+    "rating": 6.6,
+    "num_votes": 0,
+    "runtime": 1215105,
+    "overview": "be told- you realize you're rooting for her to not be alone and be okay.",
+    "imdb_id": "tt32550101",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNmZjOTU5MGQtYTcyMi00ZGJjLTk4NzQtZTcwMmI0MTczNTUwXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Saving Private Ryan",
+    "year": 1998,
+    "director": "Steven SpielbergWriterRobert RodatStarsTom HanksMatt DamonTom SizemoreSee production info at IMDbProIMDb RATING",
+    "genres": [
+      "Action",
+      "Drama",
+      "Family",
+      "Music",
+      "War"
+    ],
+    "cast": [],
+    "rating": 8.6,
+    "num_votes": 0,
+    "runtime": 169,
+    "overview": ", and does so without overacting--somehow it comes from within.",
+    "imdb_id": "tt0120815",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BZGZhZGQ1ZWUtZTZjYS00MDJhLWFkYjctN2ZlYjE5NWYwZDM2XkEyXkFqcGc@._V1_QL75_UY281_CR1,0,190,281_.jpg"
+  },
+  {
+    "title": "From the World of John Wick: Ballerina",
+    "year": 2025,
+    "director": "Len WisemanWritersShay HattenDerek KolstadStarsAna de ArmasKeanu ReevesIan McShaneSee production info at IMDbProIMDb RATING",
+    "genres": [
+      "Action",
+      "Family",
+      "Music",
+      "Thriller"
+    ],
+    "cast": [],
+    "rating": 7.3,
+    "num_votes": 0,
+    "runtime": 124,
+    "overview": "progression but nothing revolutionary in this genre.",
+    "imdb_id": "tt7181546",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNzdhZmY2OTQtYWI4OC00ZThkLTlhZjAtNzE2YzRjM2Q5YjJlXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Final Destination: Bloodlines",
+    "year": 2025,
+    "director": "Zach LipovskyAdam B",
+    "genres": [
+      "Family",
+      "Horror"
+    ],
+    "cast": [],
+    "rating": 7.0,
+    "num_votes": 0,
+    "runtime": 110,
+    "overview": "was told differently this time with the whole Bloodlines twist, which made it feel fresh and exciting.",
+    "imdb_id": "tt9619824",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMzc3OWFhZWItMTE2Yy00N2NmLTg1YTktNGVlNDY0ODQ5YjNlXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "A Widow's Game",
+    "year": 2025,
+    "director": "Carlos SedesWritersRam",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Family",
+      "Mystery"
+    ],
+    "cast": [
+      "Carmen MachiIvana BaqueroTrist"
+    ],
+    "rating": 6.2,
+    "num_votes": 0,
+    "runtime": 122,
+    "overview": "A Widow's GameOriginal title: La viuda negra2025TV-MA2h 2mIMDb RATING6.",
+    "imdb_id": "tt33474172",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNDAxYTVmMTYtOGYzYi00YjFkLTkyMGEtMzc0MTUzZmY3YzFjXkEyXkFqcGc@._V1_QL75_UY281_CR18,0,190,281_.jpg"
+  },
+  {
+    "title": "The Alto Knights",
+    "year": 2025,
+    "director": "Barry LevinsonWriterNicholas PileggiStarsRobert De NiroDebra MessingKathrine NarducciSee production info at IMDbProIMDb RATING",
+    "genres": [
+      "Biography",
+      "Crime",
+      "Drama",
+      "Family",
+      "History"
+    ],
+    "cast": [],
+    "rating": 5.8,
+    "num_votes": 0,
+    "runtime": 123,
+    "overview": "Two of New York City's most notorious organized crime bosses vie for control of the city's streets.",
+    "imdb_id": "tt21815562",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNTdlY2ZmNmItMjNjMC00YzVkLWEzZDAtYzBiODJkZDRjYWVhXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "One Flew Over the Cuckoo's Nest",
+    "year": 1975,
+    "director": "Milos FormanWritersLawrence HaubenBo GoldmanKen KeseyStarsJack NicholsonLouise FletcherMichael BerrymanSee production info at IMDbProIMDb RATING",
+    "genres": [
+      "Drama",
+      "Family",
+      "Fantasy",
+      "Music",
+      "War"
+    ],
+    "cast": [],
+    "rating": 8.7,
+    "num_votes": 0,
+    "runtime": 133,
+    "overview": "of someone who desperately wanted to break out, to rebel, to change things, for himself and for the others.",
+    "imdb_id": "tt0073486",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYjBkMjgzMzYtNzRiMS00NDc3LWE4YTUtZjYxYjZhNjNhYzhhXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Seven Samurai",
+    "year": 1954,
+    "director": "Akira KurosawaWritersAkira KurosawaShinobu HashimotoHideo OguniStarsToshir",
+    "genres": [
+      "Action",
+      "Drama",
+      "Family",
+      "Music",
+      "Musical"
+    ],
+    "cast": [
+      "Toshir"
+    ],
+    "rating": 8.6,
+    "num_votes": 0,
+    "runtime": 207,
+    "overview": "a village exploited by bandits hire a veteran samurai for protection, and he gathers six other samurai to join him.",
+    "imdb_id": "tt0047478",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BZjliMWExOTMtZDQ3ZS00NWU3LWIyN2EtMjllNzk3ZTNlYzg4XkEyXkFqcGc@._V1_QL75_UY281_CR5,0,190,281_.jpg"
+  },
+  {
+    "title": "Dangerous Animals",
+    "year": 2025,
+    "director": "Sean ByrneWriterNick LepardStarsHassie HarrisonJai CourtneyJosh HeustonSee production info at IMDbProIMDb RATING",
+    "genres": [
+      "Family",
+      "Horror",
+      "Thriller"
+    ],
+    "cast": [],
+    "rating": 6.7,
+    "num_votes": 0,
+    "runtime": 98,
+    "overview": "had some cheesy romance we could have done without.",
+    "imdb_id": "tt32299316",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMTg5M2ZjNjItZThiZi00NDFiLTg3NmYtMmFhZTkxZWQ2OWVmXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Mission: Impossible - The Final Reckoning",
+    "year": 2025,
+    "director": "Christopher McQuarrieWritersBruce GellerErik JendresenChristopher McQuarrieStarsTom CruiseHayley AtwellVing RhamesSee production info at IMDbProIMDb RATING",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Family",
+      "Thriller",
+      "Epic"
+    ],
+    "cast": [],
+    "rating": 7.5,
+    "num_votes": 0,
+    "runtime": 7969,
+    "overview": "a moving plane at 140 mph, Cruise really is the last man standing against CGI other than Nolan.",
+    "imdb_id": "tt9603208",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BZGQ5NGEyYTItMjNiMi00Y2EwLTkzOWItMjc5YjJiMjMyNTI0XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "12 Angry Men",
+    "year": 1957,
+    "director": "Sidney LumetWriterReginald RoseStarsHenry FondaLee J",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Family",
+      "Music",
+      "War"
+    ],
+    "cast": [
+      "Henry FondaLee J"
+    ],
+    "rating": 9.0,
+    "num_votes": 0,
+    "runtime": 96,
+    "overview": "a New York City murder trial is frustrated by a single member whose skeptical caution forces them to more carefully consider the evidence before jumping to a hasty verdict.",
+    "imdb_id": "tt0050083",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYjE4NzdmOTYtYjc5Yi00YzBiLWEzNDEtNTgxZGQ2MWVkN2NiXkEyXkFqcGc@._V1_QL75_UX190_CR0,6,190,281_.jpg"
+  },
+  {
+    "title": "The Accountant 2",
+    "year": 2025,
+    "director": "Gavin O",
+    "genres": [
+      "Action",
+      "Crime",
+      "Drama",
+      "Family",
+      "Mystery"
+    ],
+    "cast": [
+      "Ben AffleckJon BernthalCynthia Addai"
+    ],
+    "rating": 6.8,
+    "num_votes": 0,
+    "runtime": 132,
+    "overview": "a Addai-RobinsonSee production info at IMDbProIMDb RATING6.",
+    "imdb_id": "tt7068946",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYjFiY2I0NTEtNjdjNy00MTljLThkOWYtMzNiYjYyMDcxYjhkXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "The Dark Knight",
+    "year": 2008,
+    "director": "Christopher NolanWritersJonathan NolanChristopher NolanDavid S",
+    "genres": [
+      "Action",
+      "Comedy",
+      "Crime",
+      "Drama",
+      "Family"
+    ],
+    "cast": [],
+    "rating": 9.0,
+    "num_votes": 0,
+    "runtime": 7952,
+    "overview": "a menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman, James Gordon and Harvey Dent must work together to put an end to the madness.",
+    "imdb_id": "tt0468569",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Mountainhead",
+    "year": 2025,
+    "director": "Jesse ArmstrongWriterJesse ArmstrongStarsSteve CarellJason SchwartzmanCory Michael SmithSee production info at IMDbProIMDb RATING",
+    "genres": [
+      "Drama",
+      "Family"
+    ],
+    "cast": [],
+    "rating": 5.5,
+    "num_votes": 0,
+    "runtime": 108,
+    "overview": "a great little play satirizing the carelessness of certain well-known tech billionaires today.",
+    "imdb_id": "tt35396529",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYTRjMzU5MDAtZWRlMC00MDY5LTgyMGYtOTU5MDI2MTJiYzRiXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "The Silence of the Lambs",
+    "year": 1991,
+    "director": "Jonathan DemmeWritersThomas HarrisTed TallyStarsJodie FosterAnthony HopkinsScott GlennSee production info at IMDbProIMDb RATING",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Family",
+      "Horror",
+      "Thriller"
+    ],
+    "cast": [],
+    "rating": 8.6,
+    "num_votes": 0,
+    "runtime": 118,
+    "overview": "of a young FBI trainee Clarice Starling (Jodie Foster) who is summoned to help find one serial killer called `Buffalo Bill.",
+    "imdb_id": "tt0102926",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNDdhOGJhYzctYzYwZC00YmI2LWI0MjctYjg4ODdlMDExYjBlXkEyXkFqcGc@._V1_QL75_UY281_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "The Phoenician Scheme",
+    "year": 2025,
+    "director": "Wes AndersonWritersWes AndersonRoman CoppolaStarsBenicio Del ToroMia ThreapletonMichael CeraSee production info at IMDbProIMDb RATING",
+    "genres": [
+      "Action",
+      "Comedy",
+      "Crime",
+      "Drama",
+      "Family"
+    ],
+    "cast": [],
+    "rating": 6.9,
+    "num_votes": 0,
+    "runtime": 7901,
+    "overview": ", his more recent efforts feel like he is fitting a story into his style.",
+    "imdb_id": "tt30840798",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNTJmODQzYmItNTZlMy00Mjg0LTk1NjctYjM4ZGI0NTM3ZTVjXkEyXkFqcGc@._V1_QL75_UX190_CR0,8,190,281_.jpg"
+  },
+  {
+    "title": "Predator: Killer of Killers",
+    "year": 2025,
+    "director": "Dan TrachtenbergJoshua WassungWritersMicho Robert RutareDan TrachtenbergJim ThomasStarsMichael BiehnDoug CockleRick GonzalezSee production info at IMDbProIMDb RATING",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Animation",
+      "Family",
+      "Sci-Fi"
+    ],
+    "cast": [],
+    "rating": 7.6,
+    "num_votes": 0,
+    "runtime": 85,
+    "overview": "a WassungWritersMicho Robert RutareDan TrachtenbergJim ThomasStarsMichael BiehnDoug CockleRick GonzalezSee production info at IMDbProIMDb RATING7.",
+    "imdb_id": "tt36463894",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNjM2MjA4YzQtYjBkNS00YmU3LTllOTgtMDQzMjkzM2Q4MmM5XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Lilo & Stitch",
+    "year": 2025,
+    "director": "Dean Fleischer CampWritersChris Kekaniokalani BrightMike Van WaesChris SandersStarsMaia KealohaSydney AgudongChris SandersSee production info at IMDbProIMDb RATING",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Comedy",
+      "Drama",
+      "Family"
+    ],
+    "cast": [],
+    "rating": 7.0,
+    "num_votes": 0,
+    "runtime": 108,
+    "overview": "has been changed, characters removed, not many laughs and too much focus on the human characters.",
+    "imdb_id": "tt11655566",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYmFmZjM1ZTEtYzQ5ZS00MTRmLTkzMDktYWMxNTg2NGE3YjY4XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "The Matrix",
+    "year": 1999,
+    "director": "Lana WachowskiLilly WachowskiWritersLilly WachowskiLana WachowskiStarsKeanu ReevesLaurence FishburneCarrie",
+    "genres": [
+      "Action",
+      "Family",
+      "Sci-Fi",
+      "War",
+      "Epic"
+    ],
+    "cast": [
+      "Keanu ReevesLaurence FishburneCarrie"
+    ],
+    "rating": 8.7,
+    "num_votes": 0,
+    "runtime": 136,
+    "overview": "telling, character development, and genre blending are highly influential.",
+    "imdb_id": "tt0133093",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BN2NmN2VhMTQtMDNiOS00NDlhLTliMjgtODE2ZTY0ODQyNDRhXkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg"
+  }
+]

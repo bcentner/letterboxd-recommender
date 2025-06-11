@@ -1,0 +1,127 @@
+[
+  {
+    "title": "12 Angry Men",
+    "year": 1957,
+    "director": "Sidney Lumet",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Family",
+      "Music",
+      "War"
+    ],
+    "cast": [
+      "Sidney Lumet",
+      "Reginald Rose",
+      "Henry Fonda",
+      "Lee J. Cobb",
+      "Martin Balsam"
+    ],
+    "rating": 9.0,
+    "num_votes": 2300,
+    "runtime": 96,
+    "overview": "12 Angry Men: Directed by Sidney Lumet. With Martin Balsam, John Fiedler, Lee J. Cobb, E.G. Marshall. The jury in a New York City murder trial is frustrated by a single member whose skeptical caution forces them to more carefully consider the evidence before jumping to a hasty verdict.",
+    "imdb_id": "tt0050083",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYjE4NzdmOTYtYjc5Yi00YzBiLWEzNDEtNTgxZGQ2MWVkN2NiXkEyXkFqcGc@._V1_QL75_UX190_CR0,6,190,281_.jpg"
+  },
+  {
+    "title": "The Lord of the Rings: The Fellowship of the Ring",
+    "year": 2001,
+    "director": "Peter Jackson",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Drama",
+      "Family",
+      "Fantasy"
+    ],
+    "cast": [
+      "Peter Jackson",
+      "J.R.R. Tolkien",
+      "Fran Walsh",
+      "Philippa Boyens",
+      "Elijah Wood"
+    ],
+    "rating": 8.9,
+    "num_votes": 5900,
+    "runtime": 20,
+    "overview": "The Lord of the Rings: The Fellowship of the Ring: Directed by Peter Jackson. With Alan Howard, Noel Appleby, Sean Astin, Sala Baker. A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.",
+    "imdb_id": "tt0120737",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNzIxMDQ2YTctNDY4MC00ZTRhLTk4ODQtMTVlOWY4NTdiYmMwXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Terminator 2: Judgment Day",
+    "year": 1991,
+    "director": "James",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Family",
+      "Music",
+      "Sci-Fi"
+    ],
+    "cast": [
+      "James Cameron",
+      "William Wisher",
+      "Arnold Schwarzenegger",
+      "Linda Hamilton",
+      "Edward Furlong"
+    ],
+    "rating": 8.6,
+    "num_votes": 1600,
+    "runtime": 137,
+    "overview": "Terminator 2: Judgment Day: Directed by James Cameron. With Arnold Schwarzenegger, Linda Hamilton, Edward Furlong, Robert Patrick. A cyborg, identical to the one who failed to kill Sarah Connor, must now protect her ten year old son John from an even more advanced and powerful cyborg.",
+    "imdb_id": "tt0103064",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNGMyMGNkMDUtMjc2Ni00NWFlLTgyODEtZTY2MzBiZTg0OWZiXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "The Silence of the Lambs",
+    "year": 1991,
+    "director": "Roger Corman",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Family",
+      "Horror",
+      "Thriller"
+    ],
+    "cast": [
+      "Jonathan Demme",
+      "Thomas Harris",
+      "Ted Tally",
+      "Jodie Foster",
+      "Anthony Hopkins"
+    ],
+    "rating": 8.6,
+    "num_votes": 1800,
+    "runtime": 118,
+    "overview": "The Silence of the Lambs: Directed by Jonathan Demme. With Jodie Foster, Anthony Hopkins, Scott Glenn, Ted Levine. A young F.B.I. cadet must receive the help of an incarcerated and manipulative cannibal killer to help catch another serial killer, a madman who skins his victims.",
+    "imdb_id": "tt0102926",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNDdhOGJhYzctYzYwZC00YmI2LWI0MjctYjg4ODdlMDExYjBlXkEyXkFqcGc@._V1_QL75_UY281_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Raiders of the Lost Ark",
+    "year": 1981,
+    "director": "Steven",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Family",
+      "Music",
+      "War"
+    ],
+    "cast": [
+      "Steven Spielberg",
+      "Lawrence Kasdan",
+      "George Lucas",
+      "Philip Kaufman",
+      "Harrison Ford"
+    ],
+    "rating": 8.4,
+    "num_votes": 1200,
+    "runtime": 115,
+    "overview": "Raiders of the Lost Ark: Directed by Steven Spielberg. With Harrison Ford, Karen Allen, Paul Freeman, Ronald Lacey. In 1936, archaeologist Indiana Jones is tasked by Army Intelligence to help locate a legendary ancient power, the Ark of Covenant, before the Nazis get it first.",
+    "imdb_id": "tt0082971",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BOGNhMjg2ZjgtYzk4Ni00MTViLTg1MmUtYzM2MDZiYjZlMmU3XkEyXkFqcGc@._V1_QL75_UY281_CR1,0,190,281_.jpg"
+  }
+]

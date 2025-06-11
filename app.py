@@ -11,7 +11,13 @@ stats_calculator = StatsCalculator()
 
 # Optional TMDB API key for enhanced recommendations
 tmdb_api_key = os.environ.get('TMDB_API_KEY')
+
+# Initialize recommendation engine with our movie database
 recommendation_engine = MovieRecommendationEngine(tmdb_api_key=tmdb_api_key)
+
+# Get database stats for display
+db_stats = recommendation_engine.get_database_stats()
+print(f"Movie Database Stats: {db_stats}")
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -38,8 +44,8 @@ def index():
             user_profile.username = username
             user_profile.watched_films = watched_films
             
-            # Generate recommendations
-            print(f"Generating recommendations for {username}")
+            # Generate recommendations using our movie database
+            print(f"Generating recommendations for {username} using movie database")
             recommendations = recommendation_engine.generate_recommendations(
                 user_profile, num_recommendations
             )
@@ -57,15 +63,17 @@ def index():
                                  preferred_genres=preferred_genres,
                                  preferred_directors=preferred_directors,
                                  stats=stats,
-                                 options=options)
+                                 options=options,
+                                 db_stats=db_stats)
                                  
         except Exception as e:
             print(f"Error generating recommendations: {e}")
             import traceback
             traceback.print_exc()
             return render_template("error.html", error=str(e))
-            
-    return render_template("index.html")
+    
+    # Pass database stats to the index page
+    return render_template("index.html", db_stats=db_stats)
 
 @app.route("/stats/<username>")
 def view_stats(username):
@@ -78,6 +86,11 @@ def view_stats(username):
     except Exception as e:
         print(f"Error fetching user stats: {e}")
         return render_template("error.html", error=str(e))
+
+@app.route("/database")
+def database_info():
+    """Show information about the movie database"""
+    return render_template("database.html", db_stats=db_stats)
 
 if __name__ == "__main__":
     app.run(debug=True)
