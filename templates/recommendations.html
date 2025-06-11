@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendations for {{ username }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">Movie Recommendations</h1>
+            <h2 class="text-2xl text-indigo-600 mb-4">for {{ username }}</h2>
+            <a href="/" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-600 bg-indigo-100 hover:bg-indigo-200">
+                ← Get recommendations for another user
+            </a>
+        </div>
+
+        <!-- User Profile Summary -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-4">Your Viewing Profile</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-indigo-600">{{ user_profile.total_films }}</div>
+                    <div class="text-gray-600">Films Watched</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-indigo-600">{{ user_profile.average_rating }}</div>
+                    <div class="text-gray-600">Average Rating</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-indigo-600">{{ rating_tendency.title() }}</div>
+                    <div class="text-gray-600">Rating Style</div>
+                </div>
+            </div>
+            
+            <!-- Preferences -->
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% if preferred_genres %}
+                <div>
+                    <h4 class="font-medium text-gray-900 mb-2">Top Genres</h4>
+                    <div class="flex flex-wrap gap-2">
+                        {% for genre in preferred_genres[:5] %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {{ genre }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if preferred_directors %}
+                <div>
+                    <h4 class="font-medium text-gray-900 mb-2">Favorite Directors</h4>
+                    <div class="flex flex-wrap gap-2">
+                        {% for director in preferred_directors[:3] %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            {{ director }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Recommendations Grid -->
+        {% if recommendations %}
+        <div class="mb-6">
+            <h3 class="text-2xl font-semibold text-gray-900 mb-4">
+                Recommended for You ({{ recommendations|length }} movies)
+            </h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for rec in recommendations %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                <!-- Movie Poster -->
+                <div class="aspect-w-2 aspect-h-3 bg-gray-200">
+                    {% if rec.poster_url %}
+                    <img src="{{ rec.poster_url }}" alt="{{ rec.title }} poster" 
+                         class="w-full h-48 object-cover"
+                         onerror="this.src='https://via.placeholder.com/300x450/e5e7eb/9ca3af?text=No+Poster'">
+                    {% else %}
+                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                        <span class="text-gray-400 text-sm">No Poster</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Movie Details -->
+                <div class="p-4">
+                    <h4 class="font-semibold text-lg text-gray-900 mb-1 line-clamp-2">
+                        {{ rec.title }}
+                    </h4>
+                    <p class="text-gray-600 text-sm mb-2">
+                        {{ rec.year }} • {{ rec.director }}
+                    </p>
+                    
+                    <!-- Genres -->
+                    {% if rec.genres %}
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        {% for genre in rec.genres[:3] %}
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                            {{ genre }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Overview -->
+                    {% if rec.overview %}
+                    <p class="text-gray-600 text-sm mb-3 line-clamp-3">
+                        {{ rec.overview }}
+                    </p>
+                    {% endif %}
+                    
+                    <!-- Recommendation Reasons -->
+                    {% if rec.reasons %}
+                    <div class="border-t pt-3">
+                        <p class="text-xs font-medium text-gray-500 mb-1">Why recommended:</p>
+                        {% for reason in rec.reasons[:2] %}
+                        <p class="text-xs text-gray-600">• {{ reason }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Score (for debugging - remove in production) -->
+                    <div class="mt-2 text-right">
+                        <span class="text-xs text-gray-400">Score: {{ "%.1f"|format(rec.score) }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% else %}
+        <!-- No Recommendations -->
+        <div class="text-center py-12">
+            <div class="text-gray-400 text-6xl mb-4">🎬</div>
+            <h3 class="text-xl font-medium text-gray-900 mb-2">No recommendations found</h3>
+            <p class="text-gray-600 mb-4">
+                We couldn't generate recommendations. This might be because:
+            </p>
+            <ul class="text-left text-gray-600 max-w-md mx-auto space-y-1">
+                <li>• Your profile doesn't have enough viewing history</li>
+                <li>• Genre analysis wasn't enabled</li>
+                <li>• Technical issues occurred during processing</li>
+            </ul>
+            <a href="/" class="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                Try Again
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Footer -->
+        <div class="mt-12 text-center text-gray-500 text-sm">
+            <p>Recommendations generated based on your Letterboxd viewing history and preferences.</p>
+            <p class="mt-2">
+                <a href="/stats/{{ username }}" class="text-indigo-600 hover:text-indigo-500">
+                    View detailed stats instead
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <style>
+        /* Line clamp utilities for text truncation */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</body>
+</html>
