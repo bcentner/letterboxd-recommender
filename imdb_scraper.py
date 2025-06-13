@@ -58,55 +58,88 @@ class IMDBScraper:
         lists = [
             "/chart/top/",  # Top 250
             "/chart/moviemeter/",  # Most Popular Movies
+            "/search/title/?title_type=feature&sort=num_votes,desc",  # Most Voted
+            "/search/title/?title_type=feature&sort=user_rating,desc",  # Highest Rated
+            "/search/title/?title_type=feature&year=2020-2024&sort=num_votes,desc",  # Recent Popular
+            "/search/title/?title_type=feature&year=2010-2019&sort=num_votes,desc",  # 2010s Popular
+            "/search/title/?title_type=feature&year=2000-2009&sort=num_votes,desc",  # 2000s Popular
+            "/search/title/?title_type=feature&year=1990-1999&sort=num_votes,desc",  # 1990s Popular
+            "/search/title/?title_type=feature&year=1980-1989&sort=num_votes,desc",  # 1980s Popular
+            "/search/title/?title_type=feature&year=1970-1979&sort=num_votes,desc",  # 1970s Popular
+            "/search/title/?title_type=feature&year=1960-1969&sort=num_votes,desc",  # 1960s Popular
+            "/search/title/?title_type=feature&year=1950-1959&sort=num_votes,desc",  # 1950s Popular
         ]
         return lists
     
     def scrape_movie_list(self, list_url: str) -> List[str]:
         """Scrape a list page and return movie IDs"""
-        movie_ids = []
+        movie_ids = set()  # Use set to avoid duplicates
         try:
             print(f"Scraping list: {list_url}")
-            response = self.session.get(self.base_url + list_url, timeout=10)
-            response.raise_for_status()
             
-            soup = BeautifulSoup(response.content, 'html.parser')
-            
-            # Parse the text content to find IMDB IDs
-            page_text = soup.get_text()
-            
-            # Look for patterns like "The Shawshank Redemption (1994)" followed by rating info
-            # and extract IMDB IDs from any links
-            
-            # First, get all links that contain /title/tt
-            all_links = soup.find_all('a', href=True)
-            for link in all_links:
-                href = link.get('href', '')
-                if '/title/tt' in href:
-                    # Extract the IMDB ID
+            # For search pages, we need to handle pagination
+            if "search/title" in list_url:
+                # Add parameters for more results per page and start position
+                base_url = self.base_url + list_url
+                if "?" in base_url:
+                    base_url += "&"
+                else:
+                    base_url += "?"
+                base_url += "count=250"  # Get 250 results per page
+                
+                # Try multiple pages
+                for start in range(1, 1001, 250):  # Get up to 1000 movies from each search
+                    url = f"{base_url}&start={start}"
+                    print(f"Scraping page {start//250 + 1}...")
+                    
+                    response = self.session.get(url, timeout=15)
+                    response.raise_for_status()
+                    
+                    soup = BeautifulSoup(response.content, 'html.parser')
+                    
+                    # Find all movie links
+                    movie_links = soup.find_all('a', href=re.compile(r'/title/tt\d+'))
+                    page_movie_ids = set()
+                    
+                    for link in movie_links:
+                        href = link.get('href', '')
+                        movie_id_match = re.search(r'/title/(tt\d+)', href)
+                        if movie_id_match:
+                            page_movie_ids.add(movie_id_match.group(1))
+                    
+                    if not page_movie_ids:  # No more movies found
+                        break
+                        
+                    movie_ids.update(page_movie_ids)
+                    print(f"Found {len(page_movie_ids)} movies on page {start//250 + 1}")
+                    
+                    # Check if we've hit the end of results
+                    if "Next »" not in response.text:
+                        break
+                        
+                    time.sleep(random.uniform(2, 3))  # Rate limiting between pages
+            else:
+                # For chart pages (top 250, moviemeter)
+                response = self.session.get(self.base_url + list_url, timeout=15)
+                response.raise_for_status()
+                
+                soup = BeautifulSoup(response.content, 'html.parser')
+                
+                # Find all movie links
+                movie_links = soup.find_all('a', href=re.compile(r'/title/tt\d+'))
+                for link in movie_links:
+                    href = link.get('href', '')
                     movie_id_match = re.search(r'/title/(tt\d+)', href)
                     if movie_id_match:
-                        movie_id = movie_id_match.group(1)
-                        if movie_id not in movie_ids:
-                            movie_ids.append(movie_id)
+                        movie_ids.add(movie_id_match.group(1))
             
-            # If we still don't have movies, try parsing the structured text
-            if not movie_ids:
-                # Look for patterns in the text that indicate movie entries
-                lines = page_text.split('\n')
-                for line in lines:
-                    # Look for year patterns like (1994), (2008), etc.
-                    year_matches = re.findall(r'\((\d{4})\)', line)
-                    if year_matches:
-                        # This might be a movie line, but we need the ID from elsewhere
-                        pass
-            
-            print(f"Found {len(movie_ids)} movies in list")
-            time.sleep(random.uniform(1, 2))  # Rate limiting
+            print(f"Found {len(movie_ids)} unique movies in list")
+            time.sleep(random.uniform(1, 2))  # Rate limiting between lists
             
         except Exception as e:
             print(f"Error scraping list {list_url}: {e}")
         
-        return movie_ids
+        return list(movie_ids)  # Convert set back to list
     
     def scrape_movie_details(self, movie_id: str) -> Optional[Movie]:
         """Scrape detailed information for a specific movie"""

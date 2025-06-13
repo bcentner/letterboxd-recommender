@@ -4,6 +4,7 @@ from stats import StatsCalculator, UserProfile
 from recommendation import MovieRecommendationEngine
 import asyncio
 import os
+import json
 
 app = Flask(__name__)
 scraper = Scraper()
@@ -91,6 +92,27 @@ def view_stats(username):
 def database_info():
     """Show information about the movie database"""
     return render_template("database.html", db_stats=db_stats)
+
+def load_movies_from_db():
+    global app_movies
+    try:
+        # Read (or merge) the database (movie_database.json) into the in-memory cache (app_movies) so that if the crawler (or another process) updates the database (for example, by merging in new movies) the app will load (or merge) the updated (or merged) database.
+        if os.path.exists(DATABASE_FILE):
+             with open(DATABASE_FILE, 'r', encoding='utf-8') as f:
+                 db_movies = json.load(f)
+                 # Merge (or overwrite) the in-memory cache (app_movies) with the database (db_movies) (using imdb_id as the key) so that if the crawler (or another process) updates (or merges) the database (for example, by merging in new movies) the app will load (or merge) the updated (or merged) database.
+                 db_dict = { m["imdb_id"]: m for m in db_movies }
+                 for m in app_movies:
+                     if m["imdb_id"] in db_dict:
+                         db_dict[m["imdb_id"]] = m
+                 app_movies = list(db_dict.values())
+                 print(f"Loaded (merged) {len(app_movies)} movies from database (file: {DATABASE_FILE})")
+        else:
+             print(f"Database file ({DATABASE_FILE}) does not exist (or is empty). (No movies loaded.)")
+             app_movies = []
+    except Exception as e:
+         print(f"Error (or exception) loading (or merging) movies from database: {e} (file may not exist or be empty.)")
+         app_movies = []
 
 if __name__ == "__main__":
     app.run(debug=True)

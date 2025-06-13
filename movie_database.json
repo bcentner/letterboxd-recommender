@@ -1,28 +1,573 @@
 [
   {
-    "title": "12 Angry Men",
-    "year": 1957,
-    "director": "Sidney Lumet",
+    "title": "The Godfather",
+    "year": 1972,
+    "director": "Lenny Montana",
     "genres": [
       "Crime",
       "Drama",
       "Family",
       "Music",
+      "Western"
+    ],
+    "cast": [
+      "Francis Ford Coppola",
+      "Mario Puzo",
+      "Marlon Brando",
+      "Al Pacino",
+      "James Caan"
+    ],
+    "rating": 9.2,
+    "num_votes": 5800,
+    "runtime": 175,
+    "overview": "The Godfather: Directed by Francis Ford Coppola. With Marlon Brando, Al Pacino, James Caan, Richard S. Castellano. The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+    "imdb_id": "tt0068646",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNGEwYjgwOGQtYjg5ZS00Njc1LTk2ZGEtM2QwZWQ2NjdhZTE5XkEyXkFqcGc@._V1_QL75_UY281_CR4,0,190,281_.jpg"
+  },
+  {
+    "title": "Straw",
+    "year": 2025,
+    "director": "Tyler",
+    "genres": [
+      "Drama",
+      "Family",
+      "Music",
+      "Thriller",
       "War"
     ],
     "cast": [
-      "Sidney Lumet",
-      "Reginald Rose",
-      "Henry Fonda",
-      "Lee J. Cobb",
-      "Martin Balsam"
+      "Tyler Perry",
+      "Taraji P. Henson",
+      "Sherri Shepherd",
+      "Teyana Taylor",
+      ""
+    ],
+    "rating": 6.6,
+    "num_votes": 0,
+    "runtime": 105,
+    "overview": "Straw: Directed by Tyler Perry. With Taraji P. Henson, Sherri Shepherd, Teyana Taylor, Sinbad. A single mother navigates a series of unfortunate events, leading her down an unforeseen path where she becomes embroiled in a situation she never envisioned, finding herself at the center of suspicion in an indifferent world.",
+    "imdb_id": "tt32550101",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNmZjOTU5MGQtYTcyMi00ZGJjLTk4NzQtZTcwMmI0MTczNTUwXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Fight Club",
+    "year": 1999,
+    "director": "David",
+    "genres": [
+      "Comedy",
+      "Crime",
+      "Drama",
+      "Family",
+      "Thriller"
+    ],
+    "cast": [
+      "David Fincher",
+      "Chuck Palahniuk",
+      "Jim Uhls",
+      "Brad Pitt",
+      "Edward Norton"
+    ],
+    "rating": 8.8,
+    "num_votes": 4600,
+    "runtime": 139,
+    "overview": "Fight Club: Directed by David Fincher. With Edward Norton, Brad Pitt, Meat Loaf, Zach Grenier. An insomniac office worker and a devil-may-care soap maker form an underground fight club that evolves into much more.",
+    "imdb_id": "tt0137523",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BOTgyOGQ1NDItNGU3Ny00MjU3LTg2YWEtNmEyYjBiMjI1Y2M5XkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg"
+  },
+  {
+    "title": "Se7en",
+    "year": 1995,
+    "director": "David",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Family",
+      "Mystery",
+      "Thriller"
+    ],
+    "cast": [
+      "David Fincher",
+      "Andrew Kevin Walker",
+      "Morgan Freeman",
+      "Brad Pitt",
+      "Kevin Spacey"
+    ],
+    "rating": 8.6,
+    "num_votes": 2100,
+    "runtime": 127,
+    "overview": "Se7en: Directed by David Fincher. With Morgan Freeman, Andrew Kevin Walker, Daniel Zacapa, Brad Pitt. Two detectives, a rookie and a veteran, hunt a serial killer who uses the seven deadly sins as his motives.",
+    "imdb_id": "tt0114369",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BY2IzNzMxZjctZjUxZi00YzAxLTk3ZjMtODFjODdhMDU5NDM1XkEyXkFqcGc@._V1_QL75_UX190_CR0,8,190,281_.jpg"
+  },
+  {
+    "title": "Saving Private Ryan",
+    "year": 1998,
+    "director": "Steven",
+    "genres": [
+      "Drama",
+      "Family",
+      "Music",
+      "War",
+      "Epic"
+    ],
+    "cast": [
+      "Steven Spielberg",
+      "Robert Rodat",
+      "Tom Hanks",
+      "Matt Damon",
+      ""
+    ],
+    "rating": 8.6,
+    "num_votes": 3000,
+    "runtime": 169,
+    "overview": "Saving Private Ryan: Directed by Steven Spielberg. With Tom Hanks, Tom Sizemore, Edward Burns, Barry Pepper. Following the Normandy Landings, a group of U.S. soldiers go behind enemy lines to retrieve a paratrooper whose comrades have been killed in action.",
+    "imdb_id": "tt0120815",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BZGZhZGQ1ZWUtZTZjYS00MDJhLWFkYjctN2ZlYjE5NWYwZDM2XkEyXkFqcGc@._V1_QL75_UY281_CR1,0,190,281_.jpg"
+  },
+  {
+    "title": "Mountainhead",
+    "year": 2025,
+    "director": "Jesse",
+    "genres": [
+      "Drama",
+      "Family"
+    ],
+    "cast": [
+      "Jesse Armstrong",
+      "Steve Carell",
+      "Jason Schwartzman",
+      "Cory Michael Smith",
+      ""
+    ],
+    "rating": 5.4,
+    "num_votes": 0,
+    "runtime": 108,
+    "overview": "Mountainhead: Directed by Jesse Armstrong. With Steve Carell, Jason Schwartzman, Cory Michael Smith, Ramy Youssef. Four friends reunite during worldwide economic turmoil.",
+    "imdb_id": "tt35396529",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYTRjMzU5MDAtZWRlMC00MDY5LTgyMGYtOTU5MDI2MTJiYzRiXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "The Accountant",
+    "year": 2016,
+    "director": "Gavin",
+    "genres": [
+      "Action",
+      "Crime",
+      "Drama",
+      "Family",
+      "Thriller"
+    ],
+    "cast": [
+      "Gavin O'Connor",
+      "Bill Dubuque",
+      "Ben Affleck",
+      "Anna Kendrick",
+      "J.K. Simmons"
+    ],
+    "rating": 7.3,
+    "num_votes": 0,
+    "runtime": 128,
+    "overview": "The Accountant: Directed by Gavin O'Connor. With Ben Affleck, Anna Kendrick, J.K. Simmons, Jon Bernthal. As a math savant uncooks the books for a new client, the Treasury Department closes in on his activities, and the body count starts to rise.",
+    "imdb_id": "tt2140479",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNDc5Mzg2NTYxNV5BMl5BanBnXkFtZTgwMjQ2ODAwOTE@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Goodfellas",
+    "year": 1990,
+    "director": "Martin Scorsese",
+    "genres": [
+      "Biography",
+      "Crime",
+      "Drama",
+      "Family",
+      "Music"
+    ],
+    "cast": [
+      "Martin Scorsese",
+      "Nicholas Pileggi",
+      "Robert De Niro",
+      "Ray Liotta",
+      "Joe Pesci"
+    ],
+    "rating": 8.7,
+    "num_votes": 1700,
+    "runtime": 145,
+    "overview": "Goodfellas: Directed by Martin Scorsese. With Robert De Niro, Ray Liotta, Joe Pesci, Lorraine Bracco. The story of Henry Hill and his life in the mafia, covering his relationship with his wife Karen and his mob partners Jimmy Conway and Tommy DeVito.",
+    "imdb_id": "tt0099685",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BN2E5NzI2ZGMtY2VjNi00YTRjLWI1MDUtZGY5OWU1MWJjZjRjXkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg"
+  },
+  {
+    "title": "Dangerous Animals",
+    "year": 2025,
+    "director": "Sean",
+    "genres": [
+      "Drama",
+      "Family",
+      "Fantasy",
+      "Horror",
+      "Thriller"
+    ],
+    "cast": [
+      "Sean Byrne",
+      "Nick Lepard",
+      "Hassie Harrison",
+      "Jai Courtney",
+      "Josh Heuston"
+    ],
+    "rating": 6.8,
+    "num_votes": 0,
+    "runtime": 98,
+    "overview": "Dangerous Animals: Directed by Sean Byrne. With Hassie Harrison, Jai Courtney, Josh Heuston, Ella Newton. When Zephyr, a savvy and free-spirited surfer, is abducted by a shark-obsessed serial killer and held captive on his boat, she must figure out how to escape before he carries out a ritualistic feeding to the sharks below.",
+    "imdb_id": "tt32299316",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMTg5M2ZjNjItZThiZi00NDFiLTg3NmYtMmFhZTkxZWQ2OWVmXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Interstellar",
+    "year": 2014,
+    "director": "Kip Thorne",
+    "genres": [
+      "Adventure",
+      "Drama",
+      "Family",
+      "Sci-Fi",
+      "War"
+    ],
+    "cast": [
+      "Christopher Nolan",
+      "Jonathan Nolan",
+      "Matthew McConaughey",
+      "Anne Hathaway",
+      "Jessica Chastain"
+    ],
+    "rating": 8.7,
+    "num_votes": 6700,
+    "runtime": 167,
+    "overview": "Interstellar: Directed by Christopher Nolan. With Ellen Burstyn, Matthew McConaughey, Mackenzie Foy, John Lithgow. When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.",
+    "imdb_id": "tt0816692",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "The Dark Knight",
+    "year": 2008,
+    "director": "Christopher",
+    "genres": [
+      "Action",
+      "Comedy",
+      "Crime",
+      "Drama",
+      "Family"
+    ],
+    "cast": [
+      "Christopher Nolan",
+      "Jonathan Nolan",
+      "David S. Goyer",
+      "Christian Bale",
+      "Heath Ledger"
     ],
     "rating": 9.0,
-    "num_votes": 2300,
-    "runtime": 96,
-    "overview": "12 Angry Men: Directed by Sidney Lumet. With Martin Balsam, John Fiedler, Lee J. Cobb, E.G. Marshall. The jury in a New York City murder trial is frustrated by a single member whose skeptical caution forces them to more carefully consider the evidence before jumping to a hasty verdict.",
-    "imdb_id": "tt0050083",
-    "poster_url": "https://m.media-amazon.com/images/M/MV5BYjE4NzdmOTYtYjc5Yi00YzBiLWEzNDEtNTgxZGQ2MWVkN2NiXkEyXkFqcGc@._V1_QL75_UX190_CR0,6,190,281_.jpg"
+    "num_votes": 9000,
+    "runtime": 32,
+    "overview": "The Dark Knight: Directed by Christopher Nolan. With Christian Bale, Heath Ledger, Aaron Eckhart, Michael Caine. When a menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman, James Gordon and Harvey Dent must work together to put an end to the madness.",
+    "imdb_id": "tt0468569",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Forrest Gump",
+    "year": 1994,
+    "director": "Robert",
+    "genres": [
+      "Drama",
+      "Family",
+      "Romance",
+      "Epic"
+    ],
+    "cast": [
+      "Robert Zemeckis",
+      "Winston Groom",
+      "Eric Roth",
+      "Tom Hanks",
+      "Robin Wright"
+    ],
+    "rating": 8.8,
+    "num_votes": 3300,
+    "runtime": 22,
+    "overview": "Forrest Gump: Directed by Robert Zemeckis. With Tom Hanks, Rebecca Williams, Sally Field, Michael Conner Humphreys. The history of the United States from the 1950s to the '70s unfolds from the perspective of an Alabama man with an IQ of 75, who yearns to be reunited with his childhood sweetheart.",
+    "imdb_id": "tt0109830",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNDYwNzVjMTItZmU5YS00YjQ5LTljYjgtMjY2NDVmYWMyNWFmXkEyXkFqcGc@._V1_QL75_UY281_CR2,0,190,281_.jpg"
+  },
+  {
+    "title": "Fountain of Youth",
+    "year": 2025,
+    "director": "Guy",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Family",
+      "Fantasy",
+      "Mystery"
+    ],
+    "cast": [
+      "Guy Ritchie",
+      "James Vanderbilt",
+      "John Krasinski",
+      "Natalie Portman",
+      "Eiza González"
+    ],
+    "rating": 5.7,
+    "num_votes": 0,
+    "runtime": 10,
+    "overview": "Fountain of Youth: Directed by Guy Ritchie. With John Krasinski, Natalie Portman, Eiza González, Domhnall Gleeson. Two estranged siblings join forces to seek the legendary Fountain of Youth. Using historical clues, they embark on an epic quest filled with adventure. If successful, the mythical fountain could grant them immortality.",
+    "imdb_id": "tt27075958",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNWRlZmU3ZTItM2JlYi00YTg1LTgxNTItMjMyNzIyZWY5YWJmXkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg"
+  },
+  {
+    "title": "The Godfather Part II",
+    "year": 1974,
+    "director": "Francis",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Family",
+      "Epic"
+    ],
+    "cast": [
+      "Francis Ford Coppola",
+      "Mario Puzo",
+      "Al Pacino",
+      "Robert De Niro",
+      "Robert Duvall"
+    ],
+    "rating": 9.0,
+    "num_votes": 1400,
+    "runtime": 202,
+    "overview": "The Godfather Part II: Directed by Francis Ford Coppola. With Al Pacino, Robert Duvall, Diane Keaton, Robert De Niro. The early life and career of Vito Corleone in 1920s New York City is portrayed, while his son, Michael, expands and tightens his grip on the family crime syndicate.",
+    "imdb_id": "tt0071562",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMDIxMzBlZDktZjMxNy00ZGI4LTgxNDEtYWRlNzRjMjJmOGQ1XkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg"
+  },
+  {
+    "title": "The Matrix",
+    "year": 1999,
+    "director": "Unknown",
+    "genres": [
+      "Action",
+      "Family",
+      "Sci-Fi",
+      "War",
+      "Epic"
+    ],
+    "cast": [
+      "Lana Wachowski",
+      "Lilly Wachowski",
+      "Keanu Reeves",
+      "Laurence Fishburne",
+      "Carrie-Anne Moss"
+    ],
+    "rating": 8.7,
+    "num_votes": 5100,
+    "runtime": 136,
+    "overview": "The Matrix: Directed by Lana Wachowski, Lilly Wachowski. With Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss, Hugo Weaving. When a beautiful stranger leads computer hacker Neo to a forbidding underworld, he discovers the shocking truth--the life he knows is the elaborate deception of an evil cyber-intelligence.",
+    "imdb_id": "tt0133093",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BN2NmN2VhMTQtMDNiOS00NDlhLTliMjgtODE2ZTY0ODQyNDRhXkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg"
+  },
+  {
+    "title": "The Lord of the Rings: The Two Towers",
+    "year": 2002,
+    "director": "Peter",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Drama",
+      "Family",
+      "Fantasy"
+    ],
+    "cast": [
+      "Peter Jackson",
+      "J.R.R. Tolkien",
+      "Fran Walsh",
+      "Philippa Boyens",
+      "Elijah Wood"
+    ],
+    "rating": 8.8,
+    "num_votes": 2800,
+    "runtime": 59,
+    "overview": "The Lord of the Rings: The Two Towers: Directed by Peter Jackson. With Bruce Allpress, Sean Astin, John Bach, Sala Baker. While Frodo and Sam edge closer to Mordor with the help of the shifty Gollum, the divided fellowship makes a stand against Sauron's new ally, Saruman, and his hordes of Isengard.",
+    "imdb_id": "tt0167261",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMGQxMDdiOWUtYjc1Ni00YzM1LWE2NjMtZTg3Y2JkMjEzMTJjXkEyXkFqcGc@._V1_QL75_UX190_CR0,7,190,281_.jpg"
+  },
+  {
+    "title": "The Shawshank Redemption",
+    "year": 1994,
+    "director": "Frank Darabont",
+    "genres": [
+      "Drama",
+      "Family",
+      "War",
+      "Epic",
+      "Period Drama"
+    ],
+    "cast": [
+      "Frank Darabont",
+      "Stephen King",
+      "Tim Robbins",
+      "Morgan Freeman",
+      "Bob Gunton"
+    ],
+    "rating": 9.3,
+    "num_votes": 11500,
+    "runtime": 142,
+    "overview": "The Shawshank Redemption: Directed by Frank Darabont. With Tim Robbins, Morgan Freeman, Bob Gunton, William Sadler. A banker convicted of uxoricide forms a friendship over a quarter century with a hardened convict, while maintaining his innocence and trying to remain hopeful through simple compassion.",
+    "imdb_id": "tt0111161",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMDAyY2FhYjctNDc5OS00MDNlLThiMGUtY2UxYWVkNGY2ZjljXkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg"
+  },
+  {
+    "title": "One Flew Over the Cuckoo's Nest",
+    "year": 1975,
+    "director": "Milos",
+    "genres": [
+      "Drama",
+      "Family",
+      "Fantasy",
+      "Music",
+      "War"
+    ],
+    "cast": [
+      "Milos Forman",
+      "Lawrence Hauben",
+      "Bo Goldman",
+      "Ken Kesey",
+      "Jack Nicholson"
+    ],
+    "rating": 8.7,
+    "num_votes": 1200,
+    "runtime": 133,
+    "overview": "One Flew Over the Cuckoo's Nest: Directed by Milos Forman. With Michael Berryman, Peter Brocco, Dean R. Brooks, Alonzo Brown. A rebellious convict is sent to a psychiatric hospital for evaluation in 1963 Oregon, and encourages his docile companions to take more control of their lives and defy the tyrannical head nurse.",
+    "imdb_id": "tt0073486",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYjBkMjgzMzYtNzRiMS00NDc3LWE4YTUtZjYxYjZhNjNhYzhhXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Mission: Impossible - The Final Reckoning",
+    "year": 2025,
+    "director": "Christopher",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Family",
+      "Thriller",
+      "Epic"
+    ],
+    "cast": [
+      "Christopher McQuarrie",
+      "Bruce Geller",
+      "Erik Jendresen",
+      "Tom Cruise",
+      "Hayley Atwell"
+    ],
+    "rating": 7.5,
+    "num_votes": 1000,
+    "runtime": 150,
+    "overview": "Mission: Impossible - The Final Reckoning: Directed by Christopher McQuarrie. With Tom Cruise, Hayley Atwell, Ving Rhames, Simon Pegg. Our lives are the sum of our choices. Tom Cruise is Ethan Hunt in Mission: Impossible - The Final Reckoning.",
+    "imdb_id": "tt9603208",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BZGQ5NGEyYTItMjNiMi00Y2EwLTkzOWItMjc5YjJiMjMyNTI0XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "The Phoenician Scheme",
+    "year": 2025,
+    "director": "Wes",
+    "genres": [
+      "Action",
+      "Comedy",
+      "Crime",
+      "Drama",
+      "Family"
+    ],
+    "cast": [
+      "Wes Anderson",
+      "Roman Coppola",
+      "Benicio Del Toro",
+      "Mia Threapleton",
+      "Michael Cera"
+    ],
+    "rating": 6.9,
+    "num_votes": 0,
+    "runtime": 41,
+    "overview": "The Phoenician Scheme: Directed by Wes Anderson. With Benicio Del Toro, Truman Hanks, Steve Park, Scott Shepherd. Wealthy businessman Zsa-zsa Korda appoints his only daughter, a nun, as sole heir to his estate. As Korda embarks on a new enterprise, they soon become the target of scheming tycoons, foreign terrorists and determined assassins.",
+    "imdb_id": "tt30840798",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNTJmODQzYmItNTZlMy00Mjg0LTk1NjctYjM4ZGI0NTM3ZTVjXkEyXkFqcGc@._V1_QL75_UX190_CR0,8,190,281_.jpg"
+  },
+  {
+    "title": "City of God",
+    "year": 2002,
+    "director": "Unknown",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Family",
+      "History",
+      "Music"
+    ],
+    "cast": [
+      "Fernando Meirelles",
+      "Kátia Lund",
+      "Bráulio Mantovani",
+      "Paulo Lins",
+      "Alexandre Rodrigues"
+    ],
+    "rating": 8.6,
+    "num_votes": 1200,
+    "runtime": 130,
+    "overview": "City of God: Directed by Fernando Meirelles, Kátia Lund. With Alexandre Rodrigues, Leandro Firmino, Phellipe Haagensen, Douglas Silva. In the slums of Rio, two kids' paths diverge as one struggles to become a photographer and the other a kingpin.",
+    "imdb_id": "tt0317248",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYjY4NGI5OTUtY2ZlZS00Zjk4LTk5N2MtN2JmYWVjNGNmMGRlXkEyXkFqcGc@._V1_QL75_UY281_CR1,0,190,281_.jpg"
+  },
+  {
+    "title": "Star Wars: Episode V - The Empire Strikes Back",
+    "year": 1980,
+    "director": "Irvin",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Family",
+      "Fantasy",
+      "History"
+    ],
+    "cast": [
+      "Irvin Kershner",
+      "Leigh Brackett",
+      "Lawrence Kasdan",
+      "George Lucas",
+      "Mark Hamill"
+    ],
+    "rating": 8.7,
+    "num_votes": 1500,
+    "runtime": 124,
+    "overview": "Star Wars: Episode V - The Empire Strikes Back: Directed by Irvin Kershner. With Mark Hamill, Harrison Ford, Carrie Fisher, Billy Dee Williams. After the Empire overpowers the Rebel Alliance, Luke Skywalker begins training with Jedi Master Yoda, while Darth Vader and bounty hunter Boba Fett pursue his friends across the galaxy.",
+    "imdb_id": "tt0080684",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMTkxNGFlNDktZmJkNC00MDdhLTg0MTEtZjZiYWI3MGE5NWIwXkEyXkFqcGc@._V1_QL75_UX190_CR0,7,190,281_.jpg"
+  },
+  {
+    "title": "The Accountant 2",
+    "year": 2025,
+    "director": "Gavin",
+    "genres": [
+      "Action",
+      "Crime",
+      "Drama",
+      "Family",
+      "Mystery"
+    ],
+    "cast": [
+      "Gavin O'Connor",
+      "Bill Dubuque",
+      "Ben Affleck",
+      "Jon Bernthal",
+      "Cynthia Addai-Robinson"
+    ],
+    "rating": 6.8,
+    "num_votes": 0,
+    "runtime": 132,
+    "overview": "The Accountant 2: Directed by Gavin O'Connor. With Ben Affleck, Jon Bernthal, Cynthia Addai-Robinson, J.K. Simmons. Christian Wolff applies his brilliant mind and illegal methods to reconstruct the unsolved puzzle of a Treasury chief's murder.",
+    "imdb_id": "tt7068946",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYjFiY2I0NTEtNjdjNy00MTljLThkOWYtMzNiYjYyMDcxYjhkXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
   },
   {
     "title": "The Lord of the Rings: The Fellowship of the Ring",
@@ -44,35 +589,230 @@
     ],
     "rating": 8.9,
     "num_votes": 5900,
-    "runtime": 20,
+    "runtime": 30,
     "overview": "The Lord of the Rings: The Fellowship of the Ring: Directed by Peter Jackson. With Alan Howard, Noel Appleby, Sean Astin, Sala Baker. A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.",
     "imdb_id": "tt0120737",
     "poster_url": "https://m.media-amazon.com/images/M/MV5BNzIxMDQ2YTctNDY4MC00ZTRhLTk4ODQtMTVlOWY4NTdiYmMwXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
   },
   {
-    "title": "Terminator 2: Judgment Day",
-    "year": 1991,
-    "director": "James",
+    "title": "Thunderbolts*",
+    "year": 2025,
+    "director": "Jake",
     "genres": [
       "Action",
       "Adventure",
-      "Family",
-      "Music",
-      "Sci-Fi"
+      "Crime",
+      "Drama",
+      "Family"
     ],
     "cast": [
-      "James Cameron",
-      "William Wisher",
-      "Arnold Schwarzenegger",
-      "Linda Hamilton",
-      "Edward Furlong"
+      "Jake Schreier",
+      "Eric Pearson",
+      "Joanna Calo",
+      "Kurt Busiek",
+      "Florence Pugh"
+    ],
+    "rating": 7.5,
+    "num_votes": 0,
+    "runtime": 0,
+    "overview": "Thunderbolts*: Directed by Jake Schreier. With Florence Pugh, Sebastian Stan, Julia Louis-Dreyfus, Lewis Pullman. After finding themselves ensnared in a death trap, an unconventional team of antiheroes must go on a dangerous mission that will force them to confront the darkest corners of their pasts.",
+    "imdb_id": "tt20969586",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNDIzNGUwZmYtODM0Yy00NjA3LTgxOGUtOTY0ZGM5MjBkM2I3XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Pulp Fiction",
+    "year": 1994,
+    "director": "Quentin",
+    "genres": [
+      "Comedy",
+      "Crime",
+      "Drama",
+      "Family"
+    ],
+    "cast": [
+      "Quentin Tarantino",
+      "Roger Avary",
+      "John Travolta",
+      "Uma Thurman",
+      "Samuel L. Jackson"
+    ],
+    "rating": 8.8,
+    "num_votes": 3800,
+    "runtime": 154,
+    "overview": "Pulp Fiction: Directed by Quentin Tarantino. With Tim Roth, Amanda Plummer, Laura Lovelace, John Travolta. The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+    "imdb_id": "tt0110912",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYTViYTE3ZGQtNDBlMC00ZTAyLTkyODMtZGRiZDg0MjA2YThkXkEyXkFqcGc@._V1_QL75_UY281_CR2,0,190,281_.jpg"
+  },
+  {
+    "title": "Seven Samurai",
+    "year": 1954,
+    "director": "Akira Kurosawa",
+    "genres": [
+      "Action",
+      "Drama",
+      "Family",
+      "War",
+      "Epic"
+    ],
+    "cast": [
+      "Akira Kurosawa",
+      "Shinobu Hashimoto",
+      "Hideo Oguni",
+      "Toshirô Mifune",
+      "Takashi Shimura"
     ],
     "rating": 8.6,
-    "num_votes": 1600,
+    "num_votes": 0,
+    "runtime": 207,
+    "overview": "Seven Samurai: Directed by Akira Kurosawa. With Toshirô Mifune, Takashi Shimura, Keiko Tsushima, Yukiko Shimazaki. Farmers from a village exploited by bandits hire a veteran samurai for protection, and he gathers six other samurai to join him.",
+    "imdb_id": "tt0047478",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BZjliMWExOTMtZDQ3ZS00NWU3LWIyN2EtMjllNzk3ZTNlYzg4XkEyXkFqcGc@._V1_QL75_UY281_CR5,0,190,281_.jpg"
+  },
+  {
+    "title": "The Good, the Bad and the Ugly",
+    "year": 1966,
+    "director": "Sergio",
+    "genres": [
+      "Adventure",
+      "Comedy",
+      "Drama",
+      "Family",
+      "War"
+    ],
+    "cast": [
+      "Sergio Leone",
+      "Luciano Vincenzoni",
+      "Agenore Incrocci",
+      "Clint Eastwood",
+      "Eli Wallach"
+    ],
+    "rating": 8.8,
+    "num_votes": 1400,
+    "runtime": 178,
+    "overview": "The Good, the Bad and the Ugly: Directed by Sergio Leone. With Eli Wallach, Clint Eastwood, Lee Van Cleef, Aldo Giuffrè. A bounty-hunting scam joins two men in an uneasy alliance against a third in a race to find a fortune in gold buried in a remote cemetery.",
+    "imdb_id": "tt0060196",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMWM5ZjQxM2YtNDlmYi00ZDNhLWI4MWUtN2VkYjBlMTY1ZTkwXkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg"
+  },
+  {
+    "title": "Sinners",
+    "year": 2025,
+    "director": "Ryan Coogler",
+    "genres": [
+      "Action",
+      "Drama",
+      "Family",
+      "Horror",
+      "Music"
+    ],
+    "cast": [
+      "Ryan Coogler",
+      "Michael B. Jordan",
+      "Miles Caton",
+      "Saul Williams",
+      ""
+    ],
+    "rating": 7.8,
+    "num_votes": 1200,
     "runtime": 137,
-    "overview": "Terminator 2: Judgment Day: Directed by James Cameron. With Arnold Schwarzenegger, Linda Hamilton, Edward Furlong, Robert Patrick. A cyborg, identical to the one who failed to kill Sarah Connor, must now protect her ten year old son John from an even more advanced and powerful cyborg.",
-    "imdb_id": "tt0103064",
-    "poster_url": "https://m.media-amazon.com/images/M/MV5BNGMyMGNkMDUtMjc2Ni00NWFlLTgyODEtZTY2MzBiZTg0OWZiXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+    "overview": "Sinners: Directed by Ryan Coogler. With Miles Caton, Saul Williams, Andrene Ward-Hammond, Jack O'Connell. Trying to leave their troubled lives behind, twin brothers return to their hometown to start again, only to discover that an even greater evil is waiting to welcome them back.",
+    "imdb_id": "tt31193180",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNjIwZWY4ZDEtMmIxZS00NDA4LTg4ZGMtMzUwZTYyNzgxMzk5XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "How to Train Your Dragon",
+    "year": 2025,
+    "director": "Dean",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Animation",
+      "Comedy",
+      "Drama"
+    ],
+    "cast": [
+      "Dean DeBlois",
+      "Cressida Cowell",
+      "William Davies",
+      "Mason Thames",
+      "Nico Parker"
+    ],
+    "rating": 8.1,
+    "num_votes": 0,
+    "runtime": 125,
+    "overview": "How to Train Your Dragon: Directed by Dean DeBlois. With Mason Thames, Nico Parker, Gerard Butler, Nick Frost. As an ancient threat endangers both Vikings and dragons alike on the isle of Berk, the friendship between Hiccup, an inventive Viking, and Toothless, a Night Fury dragon, becomes the key to both species forging a new future together.",
+    "imdb_id": "tt26743210",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BODA5Y2M0NjctNWQzMy00ODRhLWE0MzUtYmE1YTAzZjYyYmQyXkEyXkFqcGc@._V1_QL75_UX190_CR0,10,190,281_.jpg"
+  },
+  {
+    "title": "Final Destination: Bloodlines",
+    "year": 2025,
+    "director": "Unknown",
+    "genres": [
+      "Family",
+      "Horror"
+    ],
+    "cast": [
+      "Zach Lipovsky",
+      "Adam B. Stein",
+      "Guy Busick",
+      "Lori Evans Taylor",
+      "Jon Watts"
+    ],
+    "rating": 7.0,
+    "num_votes": 0,
+    "runtime": 110,
+    "overview": "Final Destination: Bloodlines: Directed by Zach Lipovsky, Adam B. Stein. With Kaitlyn Santa Juana, Teo Briones, Rya Kihlstedt, Richard Harmon. Plagued by a recurring violent nightmare, a college student returns home to find the one person who can break the cycle and save her family from the horrific fate that inevitably awaits them.",
+    "imdb_id": "tt9619824",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMzc3OWFhZWItMTE2Yy00N2NmLTg1YTktNGVlNDY0ODQ5YjNlXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Karate Kid: Legends",
+    "year": 2025,
+    "director": "Jonathan",
+    "genres": [
+      "Action",
+      "Drama",
+      "Family",
+      "Sport"
+    ],
+    "cast": [
+      "Jonathan Entwistle",
+      "Rob Lieber",
+      "Robert Mark Kamen",
+      "Jackie Chan",
+      "Ben Wang"
+    ],
+    "rating": 6.6,
+    "num_votes": 0,
+    "runtime": 20,
+    "overview": "Karate Kid: Legends: Directed by Jonathan Entwistle. With Jackie Chan, Ben Wang, Joshua Jackson, Sadie Stanley. After kung fu prodigy Li Fong relocates to New York City, he attracts unwanted attention from a local karate champion and embarks on a journey to enter the ultimate karate competition with the help of Mr. Han and Daniel LaRusso.",
+    "imdb_id": "tt1674782",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BM2MwYTlkY2MtNmUzNy00MTljLThjNDAtZGUzNzMxMzcxNzM5XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Lilo & Stitch",
+    "year": 2025,
+    "director": "Dean",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Comedy",
+      "Drama",
+      "Family"
+    ],
+    "cast": [
+      "Dean Fleischer Camp",
+      "Chris Kekaniokalani Bright",
+      "Mike Van Waes",
+      "Chris Sanders",
+      "Maia Kealoha"
+    ],
+    "rating": 7.0,
+    "num_votes": 0,
+    "runtime": 108,
+    "overview": "Lilo & Stitch: Directed by Dean Fleischer Camp. With Maia Kealoha, Sydney Agudong, Chris Sanders, Zach Galifianakis. A lonely Hawaiian girl befriends a runaway alien, helping to mend her fragmented family.",
+    "imdb_id": "tt11655566",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYmFmZjM1ZTEtYzQ5ZS00MTRmLTkzMDktYWMxNTg2NGE3YjY4XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
   },
   {
     "title": "The Silence of the Lambs",
@@ -100,28 +840,348 @@
     "poster_url": "https://m.media-amazon.com/images/M/MV5BNDdhOGJhYzctYzYwZC00YmI2LWI0MjctYjg4ODdlMDExYjBlXkEyXkFqcGc@._V1_QL75_UY281_CR0,0,190,281_.jpg"
   },
   {
-    "title": "Raiders of the Lost Ark",
-    "year": 1981,
-    "director": "Steven",
+    "title": "From the World of John Wick: Ballerina",
+    "year": 2025,
+    "director": "Anjelica Huston",
+    "genres": [
+      "Action",
+      "Family",
+      "Music",
+      "Thriller"
+    ],
+    "cast": [
+      "Len Wiseman",
+      "Shay Hatten",
+      "Derek Kolstad",
+      "Ana de Armas",
+      "Keanu Reeves"
+    ],
+    "rating": 7.3,
+    "num_votes": 0,
+    "runtime": 124,
+    "overview": "From the World of John Wick: Ballerina: Directed by Len Wiseman. With Ana de Armas, Keanu Reeves, Ian McShane, Anjelica Huston. An assassin trained in the traditions of the Ruska Roma organization sets out to seek revenge after her father's death.",
+    "imdb_id": "tt7181546",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNzdhZmY2OTQtYWI4OC00ZThkLTlhZjAtNzE2YzRjM2Q5YjJlXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Inception",
+    "year": 2010,
+    "director": "Christopher",
     "genres": [
       "Action",
       "Adventure",
       "Family",
       "Music",
+      "Sci-Fi"
+    ],
+    "cast": [
+      "Christopher Nolan",
+      "Leonardo DiCaprio",
+      "Joseph Gordon-Levitt",
+      "Elliot Page",
+      ""
+    ],
+    "rating": 8.8,
+    "num_votes": 4900,
+    "runtime": 30,
+    "overview": "Inception: Directed by Christopher Nolan. With Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page, Tom Hardy. A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.",
+    "imdb_id": "tt1375666",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Nonnas",
+    "year": 2025,
+    "director": "Stephen",
+    "genres": [
+      "Comedy",
+      "Family",
+      "Music"
+    ],
+    "cast": [
+      "Stephen Chbosky",
+      "Liz Maccie",
+      "Jody Scaravella",
+      "Vince Vaughn",
+      "Lorraine Bracco"
+    ],
+    "rating": 6.9,
+    "num_votes": 0,
+    "runtime": 111,
+    "overview": "Nonnas: Directed by Stephen Chbosky. With Theodore Helm, Jimmy Smagula, Jamie Eddy, Adam Ferrara. After losing his beloved mother, a man risks everything to honor her by opening an Italian restaurant with actual grandmothers as the chefs.",
+    "imdb_id": "tt28309594",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BODM0M2M4YWQtMzhlNy00NjdkLWFkODktOGNlNTc4OTFiZjZmXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "The Life of Chuck",
+    "year": 2024,
+    "director": "Mike",
+    "genres": [
+      "Drama",
+      "Family",
+      "Fantasy",
+      "Horror",
+      "Music"
+    ],
+    "cast": [
+      "Mike Flanagan",
+      "Stephen King",
+      "Tom Hiddleston",
+      "Jacob Tremblay",
+      "Benjamin Pajak"
+    ],
+    "rating": 7.6,
+    "num_votes": 0,
+    "runtime": 111,
+    "overview": "The Life of Chuck: Directed by Mike Flanagan. With Tom Hiddleston, Jacob Tremblay, Benjamin Pajak, Cody Flanagan. A life-affirming, genre-bending story based on Stephen King's novella about three chapters in the life of an ordinary man named Charles Krantz.",
+    "imdb_id": "tt12908150",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BZDhlMzJhMTgtN2FhZS00OWQ1LTk3Y2ItZGNiNTQ0ZmUzYmIzXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Bring Her Back",
+    "year": 2025,
+    "director": "Unknown",
+    "genres": [
+      "Family",
+      "Horror",
+      "Mystery",
       "War"
     ],
     "cast": [
-      "Steven Spielberg",
-      "Lawrence Kasdan",
-      "George Lucas",
-      "Philip Kaufman",
-      "Harrison Ford"
+      "Danny Philippou",
+      "Michael Philippou",
+      "Bill Hinzman",
+      "Billy Barratt",
+      "Sally Hawkins"
     ],
-    "rating": 8.4,
-    "num_votes": 1200,
-    "runtime": 115,
-    "overview": "Raiders of the Lost Ark: Directed by Steven Spielberg. With Harrison Ford, Karen Allen, Paul Freeman, Ronald Lacey. In 1936, archaeologist Indiana Jones is tasked by Army Intelligence to help locate a legendary ancient power, the Ark of Covenant, before the Nazis get it first.",
-    "imdb_id": "tt0082971",
-    "poster_url": "https://m.media-amazon.com/images/M/MV5BOGNhMjg2ZjgtYzk4Ni00MTViLTg1MmUtYzM2MDZiYjZlMmU3XkEyXkFqcGc@._V1_QL75_UY281_CR1,0,190,281_.jpg"
+    "rating": 7.6,
+    "num_votes": 0,
+    "runtime": 104,
+    "overview": "Bring Her Back: Directed by Danny Philippou, Michael Philippou. With Billy Barratt, Sally Hawkins, Jonah Wren Phillips, Stephen Phillips. A brother and sister uncover a terrifying ritual at the secluded home of their new foster mother.",
+    "imdb_id": "tt32246771",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BZTlhYTk1ZTEtOWY3NC00NWQ5LTlkOTctNjQ3ZDYyZGE5ZWNlXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Predator: Killer of Killers",
+    "year": 2025,
+    "director": "Unknown",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Animation",
+      "Family",
+      "Sci-Fi"
+    ],
+    "cast": [
+      "Dan Trachtenberg",
+      "Joshua Wassung",
+      "Micho Robert Rutare",
+      "Jim Thomas",
+      "Michael Biehn"
+    ],
+    "rating": 7.6,
+    "num_votes": 0,
+    "runtime": 85,
+    "overview": "Predator: Killer of Killers: Directed by Dan Trachtenberg, Joshua Wassung. With Michael Biehn, Doug Cockle, Rick Gonzalez, Damien C. Haas. Three of the fiercest warriors in human history become prey to the ultimate killer of killers.",
+    "imdb_id": "tt36463894",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNjM2MjA4YzQtYjBkNS00YmU3LTllOTgtMDQzMjkzM2Q4MmM5XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "The Lord of the Rings: The Return of the King",
+    "year": 2003,
+    "director": "Peter",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Drama",
+      "Family",
+      "Fantasy"
+    ],
+    "cast": [
+      "Peter Jackson",
+      "J.R.R. Tolkien",
+      "Fran Walsh",
+      "Philippa Boyens",
+      "Elijah Wood"
+    ],
+    "rating": 9.0,
+    "num_votes": 4300,
+    "runtime": 201,
+    "overview": "The Lord of the Rings: The Return of the King: Directed by Peter Jackson. With Noel Appleby, Ali Astin, Sean Astin, David Aston. Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.",
+    "imdb_id": "tt0167260",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMTZkMjBjNWMtZGI5OC00MGU0LTk4ZTItODg2NWM3NTVmNWQ4XkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Captain America: Brave New World",
+    "year": 2025,
+    "director": "Julius",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Family",
+      "Music",
+      "Sci-Fi"
+    ],
+    "cast": [
+      "Julius Onah",
+      "Rob Edwards",
+      "Malcolm Spellman",
+      "Dalan Musson",
+      "Anthony Mackie"
+    ],
+    "rating": 5.7,
+    "num_votes": 1300,
+    "runtime": 58,
+    "overview": "Captain America: Brave New World: Directed by Julius Onah. With Anthony Mackie, Harrison Ford, Danny Ramirez, Shira Haas. Sam Wilson, the new Captain America, finds himself in the middle of an international incident and must discover the motive behind a nefarious global plan.",
+    "imdb_id": "tt14513804",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNDRjY2E0ZmEtN2QwNi00NTEwLWI3MWItODNkMGYwYWFjNGE0XkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg"
+  },
+  {
+    "title": "12 Angry Men",
+    "year": 1957,
+    "director": "Sidney Lumet",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Family",
+      "Music",
+      "War"
+    ],
+    "cast": [
+      "Sidney Lumet",
+      "Reginald Rose",
+      "Henry Fonda",
+      "Lee J. Cobb",
+      "Martin Balsam"
+    ],
+    "rating": 9.0,
+    "num_votes": 2300,
+    "runtime": 96,
+    "overview": "12 Angry Men: Directed by Sidney Lumet. With Martin Balsam, John Fiedler, Lee J. Cobb, E.G. Marshall. The jury in a New York City murder trial is frustrated by a single member whose skeptical caution forces them to more carefully consider the evidence before jumping to a hasty verdict.",
+    "imdb_id": "tt0050083",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYjE4NzdmOTYtYjc5Yi00YzBiLWEzNDEtNTgxZGQ2MWVkN2NiXkEyXkFqcGc@._V1_QL75_UX190_CR0,6,190,281_.jpg"
+  },
+  {
+    "title": "Mission: Impossible - Dead Reckoning Part One",
+    "year": 2023,
+    "director": "Christopher",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Family",
+      "Thriller",
+      "War"
+    ],
+    "cast": [
+      "Christopher McQuarrie",
+      "Bruce Geller",
+      "Erik Jendresen",
+      "Tom Cruise",
+      "Hayley Atwell"
+    ],
+    "rating": 7.6,
+    "num_votes": 1600,
+    "runtime": 28,
+    "overview": "Mission: Impossible - Dead Reckoning Part One: Directed by Christopher McQuarrie. With Tom Cruise, Hayley Atwell, Ving Rhames, Simon Pegg. Ethan Hunt and his IMF team must track down a dangerous weapon before it falls into the wrong hands.",
+    "imdb_id": "tt9603212",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BN2U4OTdmM2QtZTkxYy00ZmQyLTg2N2UtMDdmMGJmNDhlZDU1XkEyXkFqcGc@._V1_QL75_UY281_CR1,0,190,281_.jpg"
+  },
+  {
+    "title": "A Widow's Game",
+    "year": 2025,
+    "director": "Carlos",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Family",
+      "Mystery"
+    ],
+    "cast": [
+      "Carlos Sedes",
+      "Ramón Campos",
+      "Gema R. Neira",
+      "Carmen Machi",
+      "Ivana Baquero"
+    ],
+    "rating": 6.2,
+    "num_votes": 0,
+    "runtime": 122,
+    "overview": "A Widow's Game: Directed by Carlos Sedes. With Carmen Machi, Ivana Baquero, Tristán Ulloa, Pablo Molinero. A murder mystery about a young widow who is the prime suspect in her husband's stabbing death.",
+    "imdb_id": "tt33474172",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNDAxYTVmMTYtOGYzYi00YjFkLTkyMGEtMzc0MTUzZmY3YzFjXkEyXkFqcGc@._V1_QL75_UY281_CR18,0,190,281_.jpg"
+  },
+  {
+    "title": "Schindler's List",
+    "year": 1993,
+    "director": "Steven",
+    "genres": [
+      "Biography",
+      "Drama",
+      "Family",
+      "History",
+      "Music"
+    ],
+    "cast": [
+      "Steven Spielberg",
+      "Thomas Keneally",
+      "Steven Zaillian",
+      "Liam Neeson",
+      "Ralph Fiennes"
+    ],
+    "rating": 9.0,
+    "num_votes": 2300,
+    "runtime": 195,
+    "overview": "Schindler's List: Directed by Steven Spielberg. With Liam Neeson, Ben Kingsley, Ralph Fiennes, Caroline Goodall. In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.",
+    "imdb_id": "tt0108052",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNjM1ZDQxYWUtMzQyZS00MTE1LWJmZGYtNGUyNTdlYjM3ZmVmXkEyXkFqcGc@._V1_QL75_UX190_CR0,2,190,281_.jpg"
+  },
+  {
+    "title": "The Alto Knights",
+    "year": 2025,
+    "director": "Barry",
+    "genres": [
+      "Biography",
+      "Crime",
+      "Drama",
+      "Family",
+      "History"
+    ],
+    "cast": [
+      "Barry Levinson",
+      "Nicholas Pileggi",
+      "Robert De Niro",
+      "Debra Messing",
+      "Kathrine Narducci"
+    ],
+    "rating": 5.8,
+    "num_votes": 0,
+    "runtime": 123,
+    "overview": "The Alto Knights: Directed by Barry Levinson. With Robert De Niro, Debra Messing, Kathrine Narducci, Cosmo Jarvis. Two of New York City's most notorious organized crime bosses vie for control of the city's streets. Once best friends, petty jealousies and a series of betrayals set them on a deadly collision course.",
+    "imdb_id": "tt21815562",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNTdlY2ZmNmItMjNjMC00YzVkLWEzZDAtYzBiODJkZDRjYWVhXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "Mickey 17",
+    "year": 2025,
+    "director": "Bong",
+    "genres": [
+      "Adventure",
+      "Comedy",
+      "Family",
+      "Fantasy",
+      "Music"
+    ],
+    "cast": [
+      "Bong Joon Ho",
+      "Edward Ashton",
+      "Robert Pattinson",
+      "Steven Yeun",
+      "Michael Monroe"
+    ],
+    "rating": 6.8,
+    "num_votes": 0,
+    "runtime": 137,
+    "overview": "Mickey 17: Directed by Bong Joon Ho. With Robert Pattinson, Steven Yeun, Michael Monroe, Patsy Ferran. During a human expedition to colonize space, Mickey 17, a so-called \"expendable\" employee, is sent to explore an ice planet.",
+    "imdb_id": "tt12299608",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BZGQwYmEzMzktYzBmMy00NmVmLTkyYTUtOTYyZjliZDNhZGVkXkEyXkFqcGc@._V1_QL75_UX190_CR0,0,190,281_.jpg"
   }
 ]
