@@ -63,6 +63,15 @@ python app.py
 
 5. **Open your browser** and go to `http://localhost:5000`
 
+**Optional**: Set environment variables for customization:
+```bash
+# Custom movie database (optional)
+export MOVIE_DATABASE_PATH="path/to/your/database.json"
+
+# TMDB API for enhanced recommendations (optional)
+export TMDB_API_KEY="your_api_key_here"
+```
+
 ## How to Use
 
 ### Basic Usage
@@ -105,7 +114,66 @@ export TMDB_API_KEY="your_api_key_here"
 
 Without TMDB, the system uses the built-in movie database with 1000+ quality films.
 
-#### Database Information
+#### Custom Movie Database Path
+You can specify a custom movie database file using the `MOVIE_DATABASE_PATH` environment variable:
+
+```bash
+# On Windows:
+set MOVIE_DATABASE_PATH=path/to/your/custom_database.json
+
+# On macOS/Linux:
+export MOVIE_DATABASE_PATH="path/to/your/custom_database.json"
+```
+
+**Default**: `movie_database.json` (in the project root)
+
+#### Database Format Standards
+
+The movie database must conform to the following JSON format:
+
+```json
+[
+  {
+    "title": "Movie Title",
+    "year": 2020,
+    "director": "Director Name",
+    "genres": ["Drama", "Thriller"],
+    "cast": ["Actor 1", "Actor 2", "Actor 3"],
+    "rating": 8.5,
+    "num_votes": 1000,
+    "runtime": 120,
+    "overview": "Movie description...",
+    "imdb_id": "tt1234567",
+    "poster_url": "https://example.com/poster.jpg"
+  }
+]
+```
+
+**Example**: See `example_database.json` for a complete example of the correct format.
+
+#### Required Fields
+- **title** (string): Movie title
+- **year** (integer): Release year (1900-2030)
+- **director** (string): Director's name
+- **genres** (array of strings): List of genres
+- **rating** (float): IMDB rating (0.0-10.0)
+- **num_votes** (integer): Number of votes (≥0)
+- **runtime** (integer): Runtime in minutes (>0)
+- **overview** (string): Movie description
+- **imdb_id** (string): IMDB ID starting with "tt"
+
+#### Optional Fields
+- **cast** (array of strings): List of actors (defaults to empty array)
+- **poster_url** (string): Poster image URL (defaults to empty string)
+
+#### Validation
+The system automatically validates your database and will:
+- Skip movies with missing required fields
+- Skip movies with invalid data types or values
+- Provide warnings for problematic entries
+- Fall back to built-in data if no valid movies are found
+
+### Database Information
 Visit `/database` to see detailed information about the movie database, including:
 - Total number of movies
 - Average ratings
@@ -121,6 +189,7 @@ Visit `/database` to see detailed information about the movie database, includin
 ├── recommendation.py     # Recommendation engine and algorithms
 ├── cache.py              # Caching system for performance
 ├── movie_database.json   # Comprehensive movie database (1000+ films)
+├── example_database.json # Example database format
 ├── imdb_scraper.py       # IMDB data collection tool
 ├── populate_db.py        # Database building script
 ├── templates/            # HTML templates
@@ -141,6 +210,20 @@ The system includes a pre-built movie database with:
 - **Quality filtering**: Movies from 1950+ with good ratings
 - **Diverse selection**: Multiple genres, decades, and directors
 
+### Using Custom Databases
+
+You can use your own movie database by setting the `MOVIE_DATABASE_PATH` environment variable:
+
+```bash
+# Use a custom database file
+export MOVIE_DATABASE_PATH="/path/to/your/movies.json"
+
+# Or use a relative path
+export MOVIE_DATABASE_PATH="./data/my_movies.json"
+```
+
+**Important**: Your database must conform to the [Database Format Standards](#database-format-standards) above.
+
 ### Building Your Own Database
 To create a custom movie database:
 
@@ -152,8 +235,16 @@ python populate_db.py
 This will:
 - Scrape movies from IMDB Top 250 and Most Popular lists
 - Extract comprehensive metadata for each film
-- Save to `movie_database.json`
+- Save to `movie_database.json` (or your custom path)
 - Display database statistics
+
+### Database Validation
+The system automatically validates any database you provide:
+- **Format checking**: Ensures proper JSON structure
+- **Field validation**: Verifies all required fields are present
+- **Data validation**: Checks data types and value ranges
+- **Error reporting**: Shows warnings for problematic entries
+- **Fallback protection**: Uses built-in data if validation fails
 
 ## Troubleshooting
 

@@ -1,0 +1,41 @@
+[
+  {
+    "title": "The Shawshank Redemption",
+    "year": 1994,
+    "director": "Frank Darabont",
+    "genres": ["Drama"],
+    "cast": ["Tim Robbins", "Morgan Freeman", "Bob Gunton"],
+    "rating": 9.3,
+    "num_votes": 3100000,
+    "runtime": 142,
+    "overview": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+    "imdb_id": "tt0111161",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZDViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  },
+  {
+    "title": "The Godfather",
+    "year": 1972,
+    "director": "Francis Ford Coppola",
+    "genres": ["Crime", "Drama"],
+    "cast": ["Marlon Brando", "Al Pacino", "James Caan"],
+    "rating": 9.2,
+    "num_votes": 2100000,
+    "runtime": 175,
+    "overview": "The patriarch of a crime family transfers control to his reluctant son.",
+    "imdb_id": "tt0068646",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BNGEwYjgwOGQtYjg5ZS00Njc1LTk2ZGEtM2QwZWQ2NjdhZTE5XkEyXkFqcGc@._V1_QL75_UY281_CR4,0,190,281_.jpg"
+  },
+  {
+    "title": "The Dark Knight",
+    "year": 2008,
+    "director": "Christopher Nolan",
+    "genres": ["Action", "Crime", "Drama"],
+    "cast": ["Christian Bale", "Heath Ledger", "Aaron Eckhart"],
+    "rating": 9.0,
+    "num_votes": 3000000,
+    "runtime": 152,
+    "overview": "Batman sets out to dismantle the remaining criminal organizations that plague Gotham.",
+    "imdb_id": "tt0468569",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_QL75_UX190_CR0,0,190,281_.jpg"
+  }
+] 

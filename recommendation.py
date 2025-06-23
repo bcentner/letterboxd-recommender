@@ -66,13 +66,87 @@ class MovieRecommendationEngine:
         """Load the movie database from JSON file"""
         try:
             with open(self.movie_db_file, 'r', encoding='utf-8') as f:
-                return json.load(f)
+                database = json.load(f)
+            
+            validated_database = self._validate_database(database)
+            print(f"Loaded and validated {len(validated_database)} movies from {self.movie_db_file}")
+            return validated_database
+            
         except FileNotFoundError:
             print(f"Warning: Movie database file {self.movie_db_file} not found. Using fallback data.")
             return self._get_fallback_movies()
         except json.JSONDecodeError as e:
             print(f"Error loading movie database: {e}. Using fallback data.")
             return self._get_fallback_movies()
+    
+    def _validate_database(self, database: List[Dict]) -> List[Dict]:
+        """Validate that the database conforms to our standards"""
+        if not isinstance(database, list):
+            print("Error: Database must be a list of movies")
+            return self._get_fallback_movies()
+        
+        validated_movies = []
+        required_fields = ['title', 'year', 'director', 'genres', 'rating', 'num_votes', 'runtime', 'overview', 'imdb_id']
+        
+        for i, movie in enumerate(database):
+            if not isinstance(movie, dict):
+                print(f"Warning: Skipping invalid movie at index {i} (not a dictionary)")
+                continue
+            
+            missing_fields = [field for field in required_fields if field not in movie]
+            if missing_fields:
+                print(f"Warning: Skipping movie '{movie.get('title', 'Unknown')}' - missing fields: {missing_fields}")
+                continue
+            
+            try:
+                year = int(movie['year'])
+                if not (1900 <= year <= 2030):
+                    print(f"Warning: Skipping movie '{movie['title']}' - invalid year: {year}")
+                    continue
+                
+                rating = float(movie['rating'])
+                if not (0 <= rating <= 10):
+                    print(f"Warning: Skipping movie '{movie['title']}' - invalid rating: {rating}")
+                    continue
+                
+                num_votes = int(movie['num_votes'])
+                if num_votes < 0:
+                    print(f"Warning: Skipping movie '{movie['title']}' - invalid vote count: {num_votes}")
+                    continue
+                
+                runtime = int(movie['runtime'])
+                if runtime <= 0:
+                    print(f"Warning: Skipping movie '{movie['title']}' - invalid runtime: {runtime}")
+                    continue
+                
+                if not isinstance(movie['genres'], list) or not all(isinstance(g, str) for g in movie['genres']):
+                    print(f"Warning: Skipping movie '{movie['title']}' - invalid genres format")
+                    continue
+                
+                if 'cast' in movie and not isinstance(movie['cast'], list):
+                    movie['cast'] = []
+                elif 'cast' not in movie:
+                    movie['cast'] = []
+                
+                if 'poster_url' not in movie:
+                    movie['poster_url'] = ""
+                
+                if not movie['imdb_id'].startswith('tt'):
+                    print(f"Warning: Skipping movie '{movie['title']}' - invalid IMDB ID format: {movie['imdb_id']}")
+                    continue
+                
+                validated_movies.append(movie)
+                
+            except (ValueError, TypeError) as e:
+                print(f"Warning: Skipping movie '{movie.get('title', 'Unknown')}' - data validation error: {e}")
+                continue
+        
+        if not validated_movies:
+            print("Error: No valid movies found in database. Using fallback data.")
+            return self._get_fallback_movies()
+        
+        print(f"Database validation complete: {len(validated_movies)} valid movies out of {len(database)} total")
+        return validated_movies
     
     def _get_fallback_movies(self) -> List[Dict]:
         """Fallback movie data if database file is not available"""

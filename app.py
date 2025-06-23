@@ -13,12 +13,15 @@ stats_calculator = StatsCalculator()
 # Optional TMDB API key for enhanced recommendations
 tmdb_api_key = os.environ.get('TMDB_API_KEY')
 
+movie_db_path = os.environ.get('MOVIE_DATABASE_PATH', 'movie_database.json')
+
 # Initialize recommendation engine with our movie database
-recommendation_engine = MovieRecommendationEngine(tmdb_api_key=tmdb_api_key)
+recommendation_engine = MovieRecommendationEngine(tmdb_api_key=tmdb_api_key, movie_db_file=movie_db_path)
 
 # Get database stats for display
 db_stats = recommendation_engine.get_database_stats()
 print(f"Movie Database Stats: {db_stats}")
+print(f"Using movie database: {movie_db_path}")
 
 @app.route("/", methods=["GET", "POST"])
 def index():
