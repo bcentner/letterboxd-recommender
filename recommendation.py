@@ -199,7 +199,7 @@ class MovieRecommendationEngine:
                 if actor:
                     self.cast_index[actor.lower()].append(i)
     
-    def generate_recommendations(self, user_profile: UserProfile, num_recommendations: int = 20) -> List[MovieRecommendation]:
+    def generate_recommendations(self, user_profile: UserProfile, num_recommendations: int = 5) -> List[MovieRecommendation]:
         """Generate movie recommendations for a user based on their profile"""
         try:
             print(f"Generating recommendations for user with {len(user_profile.watched_films)} watched films")

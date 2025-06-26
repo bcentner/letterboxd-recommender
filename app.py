@@ -27,7 +27,8 @@ print(f"Using movie database: {movie_db_path}")
 def index():
     if request.method == "POST":
         username = request.form["username"]
-        num_recommendations = int(request.form.get("num_recommendations", 15))
+        # Always use 5 recommendations
+        num_recommendations = 5
         
         # Get data fetching options from form
         options = FilmDataOptions(
