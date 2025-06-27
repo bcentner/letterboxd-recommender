@@ -15,8 +15,9 @@ class Cache:
     def _load_cache(self):
         """Load the cache from the JSON file."""
         try:
+            import builtins #TODO: debug why builtin open isnt found w/o import
             if os.path.exists(self.cache_file):
-                with open(self.cache_file, 'r', encoding='utf-8') as f:
+                with builtins.open(self.cache_file, 'r', encoding='utf-8') as f:
                     self.cache_data = json.load(f)
         except Exception as e:
             print(f"Error loading cache: {e}")
@@ -25,7 +26,8 @@ class Cache:
     def _save_cache(self):
         """Save the cache to the JSON file."""
         try:
-            with open(self.cache_file, 'w', encoding='utf-8') as f:
+            import builtins #TODO: debug why builtin open isnt found w/o import
+            with builtins.open(self.cache_file, 'w', encoding='utf-8') as f:
                 json.dump(self.cache_data, f, indent=2, ensure_ascii=False)
         except Exception as e:
             print(f"Error saving cache: {e}")

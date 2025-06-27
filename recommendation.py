@@ -1,13 +1,9 @@
-import requests
 import json
-import random
-from typing import Dict, List, Optional, Tuple, Set
+from typing import Dict, List, Optional, Set
 from dataclasses import dataclass
 from stats import UserProfile, StatsCalculator
 from collections import defaultdict, Counter
-import time
 import math
-import os
 
 
 @dataclass

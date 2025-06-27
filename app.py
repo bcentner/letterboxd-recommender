@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request
 from scraper import Scraper, FilmDataOptions
-from stats import StatsCalculator, UserProfile
+from stats import StatsCalculator
 from recommendation import MovieRecommendationEngine
-import asyncio
 import os
 import json
 
@@ -118,5 +117,16 @@ def load_movies_from_db():
          print(f"Error (or exception) loading (or merging) movies from database: {e} (file may not exist or be empty.)")
          app_movies = []
 
-if __name__ == "__main__":
-    app.run(debug=True)
+class PrefixMiddleware:
+    def __init__(self, app, prefix='/letterboxd-recommender'):
+        self.app = app
+        self.prefix = prefix
+
+    def __call__(self, environ, start_response):
+        print("PrefixMiddleware called with PATH_INFO:", environ.get('PATH_INFO'))
+        if environ.get('PATH_INFO', '').startswith(self.prefix):
+            environ['PATH_INFO'] = environ['PATH_INFO'][len(self.prefix):]
+            environ['SCRIPT_NAME'] = self.prefix
+        return self.app(environ, start_response)
+
+application = PrefixMiddleware(app)
