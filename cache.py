@@ -9,15 +9,15 @@ class Cache:
         self.cache_file = cache_file
         self.expiration_days = 30  # Cache films for 30 days since they rarely change
         self.cache_data = {}
+        self._shutdown = False
         self._load_cache()
         atexit.register(self._save_cache)
 
     def _load_cache(self):
         """Load the cache from the JSON file."""
         try:
-            import builtins #TODO: debug why builtin open isnt found w/o import
             if os.path.exists(self.cache_file):
-                with builtins.open(self.cache_file, 'r', encoding='utf-8') as f:
+                with open(self.cache_file, 'r', encoding='utf-8') as f:
                     self.cache_data = json.load(f)
         except Exception as e:
             print(f"Error loading cache: {e}")
@@ -26,19 +26,26 @@ class Cache:
     def _save_cache(self):
         """Save the cache to the JSON file."""
         try:
-            import builtins #TODO: debug why builtin open isnt found w/o import
-            with builtins.open(self.cache_file, 'w', encoding='utf-8') as f:
+            if self._shutdown:
+                print("Skipping cache save - shutdown in progress")
+                return
+                
+            with open(self.cache_file, 'w', encoding='utf-8') as f:
                 json.dump(self.cache_data, f, indent=2, ensure_ascii=False)
         except Exception as e:
             print(f"Error saving cache: {e}")
 
     def close(self):
         """Save the cache before closing."""
+        self._shutdown = True
         self._save_cache()
 
     def __del__(self):
         """Ensure cache is saved when the object is destroyed."""
-        self.close()
+        try:
+            self.close()
+        except:
+            pass
 
     def _is_expired(self, timestamp_str):
         """Check if cached data has expired."""

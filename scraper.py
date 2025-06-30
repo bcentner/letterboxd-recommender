@@ -1,9 +1,6 @@
-import requests
 from bs4 import BeautifulSoup
 from collections import Counter, defaultdict
 from datetime import datetime
-import re
-import time
 import asyncio
 import aiohttp
 import json
@@ -32,8 +29,11 @@ class Scraper:
 
     def __del__(self):
         """Cleanup when the scraper is destroyed."""
-        if self.cache:
-            self.cache.close()
+        try:
+            if hasattr(self, 'cache') and self.cache:
+                self.cache.close()
+        except:
+            pass  # Ignore errors during destruction
 
     async def _fetch_with_semaphore(self, session, url: str) -> Tuple[str, str]:
         """Fetch URL with rate limiting."""

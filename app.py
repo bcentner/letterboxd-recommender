@@ -4,14 +4,16 @@ from stats import StatsCalculator
 from recommendation import MovieRecommendationEngine
 import os
 import json
+import signal
+import sys
+import atexit
 
 app = Flask(__name__)
 scraper = Scraper()
 stats_calculator = StatsCalculator()
 
-# Optional TMDB API key for enhanced recommendations
+# Optional env variables
 tmdb_api_key = os.environ.get('TMDB_API_KEY')
-
 movie_db_path = os.environ.get('MOVIE_DATABASE_PATH', 'movie_database.json')
 
 # Initialize recommendation engine with our movie database
@@ -21,6 +23,27 @@ recommendation_engine = MovieRecommendationEngine(tmdb_api_key=tmdb_api_key, mov
 db_stats = recommendation_engine.get_database_stats()
 print(f"Movie Database Stats: {db_stats}")
 print(f"Using movie database: {movie_db_path}")
+
+def cleanup():
+    """Cleanup function to properly close cache and other resources"""
+    try:
+        if hasattr(scraper, 'cache') and scraper.cache:
+            scraper.cache.close()
+        print("Cleanup completed successfully")
+    except Exception as e:
+        print(f"Error during cleanup: {e}")
+
+def signal_handler(signum, frame):
+    """Handle shutdown signals gracefully"""
+    print(f"\nReceived signal {signum}, shutting down gracefully...")
+    cleanup()
+    sys.exit(0)
+
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
+atexit.register(cleanup)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -130,3 +153,12 @@ class PrefixMiddleware:
         return self.app(environ, start_response)
 
 application = PrefixMiddleware(app)
+
+if __name__ == "__main__":
+    try:
+        print("Starting Letterboxd Recommender...")
+        app.run(debug=False, host='0.0.0.0', port=5000)
+    except KeyboardInterrupt:
+        print("\nShutting down...")
+    finally:
+        cleanup()
