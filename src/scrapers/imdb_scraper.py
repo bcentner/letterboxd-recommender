@@ -6,8 +6,6 @@ import random
 from typing import List, Dict, Optional
 import re
 from urllib.parse import urljoin, urlparse
-import asyncio
-import aiohttp
 from dataclasses import dataclass
 
 @dataclass
@@ -387,101 +385,6 @@ class IMDBScraper:
             print(f"Error scraping movie {movie_id}: {e}")
             return None
     
-    def build_movie_database(self, target_count: int = 2000) -> List[Movie]:
-        """Build a comprehensive movie database"""
-        print(f"Building movie database with target of {target_count} movies...")
-        
-        all_movie_ids = set()
-        movies = []
-        
-        # Get movie IDs from all lists
-        lists = self.get_top_movies_lists()
-        for list_url in lists:
-            movie_ids = self.scrape_movie_list(list_url)
-            all_movie_ids.update(movie_ids)
-            
-            if len(all_movie_ids) >= target_count * 1.5:  # Get extra to account for failures
-                break
-        
-        print(f"Collected {len(all_movie_ids)} unique movie IDs")
-        
-        # If we don't have enough, add some known good IMDB IDs
-        if len(all_movie_ids) < 50:
-            print("Adding known movie IDs as fallback...")
-            known_ids = [
-                'tt0111161',  # The Shawshank Redemption
-                'tt0068646',  # The Godfather
-                'tt0468569',  # The Dark Knight
-                'tt0071562',  # The Godfather Part II
-                'tt0050083',  # 12 Angry Men
-                'tt0108052',  # Schindler's List
-                'tt0167260',  # The Lord of the Rings: The Return of the King
-                'tt0110912',  # Pulp Fiction
-                'tt0120737',  # The Lord of the Rings: The Fellowship of the Ring
-                'tt0060196',  # The Good, the Bad and the Ugly
-                'tt0109830',  # Forrest Gump
-                'tt0137523',  # Fight Club
-                'tt0080684',  # Star Wars: Episode V - The Empire Strikes Back
-                'tt0099685',  # Goodfellas
-                'tt0073486',  # One Flew Over the Cuckoo's Nest
-                'tt0167261',  # The Lord of the Rings: The Two Towers
-                'tt0133093',  # The Matrix
-                'tt0047478',  # Seven Samurai
-                'tt0114369',  # Se7en
-                'tt0317248',  # City of God
-                'tt0102926',  # The Silence of the Lambs
-                'tt0038650',  # It's a Wonderful Life
-                'tt0076759',  # Star Wars
-                'tt0120815',  # Saving Private Ryan
-                'tt0816692',  # Interstellar
-                'tt0110413',  # Léon: The Professional
-                'tt0120689',  # The Green Mile
-                'tt0054215',  # Psycho
-                'tt0253474',  # The Pianist
-                'tt0120586',  # American History X
-                'tt0082971',  # Raiders of the Lost Ark
-                'tt0172495',  # Gladiator
-                'tt0103064',  # Terminator 2: Judgment Day
-                'tt0088763',  # Back to the Future
-                'tt0078748',  # Alien
-                'tt0245429',  # Spirited Away
-                'tt0079944',  # Apocalypse Now
-                'tt0078788',  # The Deer Hunter
-                'tt0209144',  # Memento
-                'tt0407887',  # The Departed
-                'tt0482571',  # The Prestige
-                'tt0120382',  # The Big Lebowski
-                'tt0114814',  # The Usual Suspects
-                'tt0027977',  # Modern Times
-                'tt0095327',  # My Neighbor Totoro
-                'tt0090605',  # Aliens
-                'tt0087843',  # Once Upon a Time in America
-                'tt0086190',  # Star Wars: Episode VI - Return of the Jedi
-                'tt0986264',  # Taxi Driver
-                'tt0056172',  # Lawrence of Arabia
-            ]
-            all_movie_ids.update(known_ids)
-        
-        # Shuffle to get variety
-        movie_ids_list = list(all_movie_ids)
-        random.shuffle(movie_ids_list)
-        
-        # Scrape movie details
-        for i, movie_id in enumerate(movie_ids_list[:int(target_count * 1.2)]):  # Try more than target to account for failures
-            if len(movies) >= target_count:
-                break
-                
-            movie = self.scrape_movie_details(movie_id)
-            if movie and movie.year > 1950 and movie.rating > 0:  # Basic quality filters
-                movies.append(movie)
-                print(f"Progress: {len(movies)}/{target_count} movies collected")
-            
-            # Progress update
-            if (i + 1) % 50 == 0:
-                print(f"Processed {i + 1} movies, collected {len(movies)} valid movies")
-        
-        print(f"Successfully collected {len(movies)} movies")
-        return movies
     
     def save_database(self, movies: List[Movie], filename: str = "movie_database.json"):
         """Save the movie database to a JSON file"""
@@ -503,33 +406,3 @@ class IMDBScraper:
         except json.JSONDecodeError as e:
             print(f"Error loading database: {e}")
             return []
-
-def main():
-    """Main function to build the movie database"""
-    scraper = IMDBScraper()
-    
-    # Build database
-    movies = scraper.build_movie_database(target_count=2000)
-    
-    # Save to JSON
-    scraper.save_database(movies)
-    
-    # Print some stats
-    if movies:
-        print(f"\nDatabase Statistics:")
-        print(f"Total movies: {len(movies)}")
-        print(f"Average rating: {sum(m.rating for m in movies) / len(movies):.2f}")
-        print(f"Year range: {min(m.year for m in movies)} - {max(m.year for m in movies)}")
-        
-        # Genre distribution
-        all_genres = []
-        for movie in movies:
-            all_genres.extend(movie.genres)
-        genre_counts = {}
-        for genre in all_genres:
-            genre_counts[genre] = genre_counts.get(genre, 0) + 1
-        
-        print(f"Top genres: {sorted(genre_counts.items(), key=lambda x: x[1], reverse=True)[:10]}")
-
-if __name__ == "__main__":
-    main()
