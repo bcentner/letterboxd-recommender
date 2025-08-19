@@ -5,7 +5,7 @@ from typing import Set, Dict, Optional, Deque
 from collections import deque
 import random
 from dataclasses import dataclass
-from scrapers.imdb_scraper import IMDBScraper, Movie
+from imdb_scraper import IMDBScraper, Movie
 import json
 import logging
 from pathlib import Path
@@ -129,6 +129,7 @@ class IMDBCrawler:
             'tt0060196',  # The Good, the Bad and the Ugly
         ]
 
+    # TODO: include minimum runtime to exclude shorts
     def _movie_meets_criteria(self, movie: Movie) -> bool:
         return (
             movie and 
@@ -258,7 +259,7 @@ async def main():
     
     try:
         await crawler.crawl()
-    except Exception as e:
+    except BaseException as e:
         logger.error(f"Crawl failed: {e}")
         crawler._save_progress()
 
