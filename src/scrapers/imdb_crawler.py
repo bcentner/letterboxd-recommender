@@ -1,10 +1,9 @@
 import asyncio
 import aiohttp
 from bs4 import BeautifulSoup
-from typing import List, Set, Dict, Optional, Deque
+from typing import Set, Dict, Optional, Deque
 from collections import deque
 import random
-import time
 from dataclasses import dataclass
 from imdb_scraper import IMDBScraper, Movie
 import json
@@ -129,6 +128,15 @@ class IMDBCrawler:
             'tt0120737',  # The Lord of the Rings: The Fellowship of the Ring
             'tt0060196',  # The Good, the Bad and the Ugly
         ]
+
+    # TODO: include minimum runtime to exclude shorts
+    def _movie_meets_criteria(self, movie: Movie) -> bool:
+        return (
+            movie and 
+            movie.year >= self.min_year and 
+            movie.rating >= self.min_rating and 
+            movie.num_votes >= self.min_votes)
+    
     
     async def crawl(self):
         """Main crawl method using BFS"""
@@ -140,27 +148,18 @@ class IMDBCrawler:
         for movie_id in self.seed_movies:
             self.queue.append((movie_id, 0))  # Start at depth 0
         
-        # BFS crawl
         while self.queue:
             movie_id, depth = self.queue.popleft()
             
-            # Skip if we've already visited this movie
             if movie_id in self.visited:
                 continue
             
             self.visited.add(movie_id)
             
             try:
-                # Scrape movie details
                 movie = self.scraper.scrape_movie_details(movie_id)
                 
-                # Validate movie meets our criteria
-                if (movie and 
-                    movie.year >= self.min_year and 
-                    movie.rating >= self.min_rating and 
-                    movie.num_votes >= self.min_votes):
-                    
-                    # Add to cache if not already present
+                if self._movie_meets_criteria(movie):
                     if movie_id not in self.movie_cache:
                         self.movie_cache[movie_id] = movie
                         self.stats.update(movie, depth=depth)
@@ -189,10 +188,8 @@ class IMDBCrawler:
                 logger.error(f"Error processing movie {movie_id}: {e}")
                 self.stats.update(None, depth=depth)
         
-        # Final save
         self._save_progress()
         
-        # Print statistics
         self.stats.print_summary()
     
     async def _get_related_movies(self, movie_id: str) -> Set[str]:
@@ -206,7 +203,6 @@ class IMDBCrawler:
                         html = await response.text()
                         soup = BeautifulSoup(html, 'html.parser')
                         
-                        # Look for "More Like This" and "You May Also Like" sections
                         sections = []
                         # Find by class (legacy)
                         sections += soup.find_all(['div', 'section'], class_=lambda x: x and ('more-like-this' in x.lower() or 'recommendations' in x.lower()))
@@ -263,10 +259,7 @@ async def main():
     
     try:
         await crawler.crawl()
-    except KeyboardInterrupt:
-        logger.info("\nCrawl interrupted by user. Saving progress...")
-        crawler._save_progress()
-    except Exception as e:
+    except BaseException as e:
         logger.error(f"Crawl failed: {e}")
         crawler._save_progress()
 
